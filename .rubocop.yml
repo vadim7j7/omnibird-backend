@@ -1,0 +1,39 @@
+# Omakase Ruby styling for Rails
+inherit_gem: { rubocop-rails-omakase: rubocop.yml }
+
+require:
+  - rubocop-rails
+
+# Overwrite or add rules to create your own house style
+AllCops:
+  NewCops: enable
+  SuggestExtensions: false
+  Exclude:
+    - 'bin/**/*'
+    - 'db/migrate/**/*'
+    - 'db/schema.rb'
+    - 'db/seeds.rb'
+    - 'lib/capistrano/**/*'
+    - 'spec/**/*'
+    - 'vendor/**/*.rb'
+    - 'vendor/bundle/**/*'
+
+Style/StringLiterals:
+  EnforcedStyle: single_quotes
+  SupportedStyles:
+    - single_quotes
+    - double_quotes
+
+Style/Documentation:
+  Enabled: false
+
+Metrics/ClassLength:
+  Enabled: false
+
+Metrics/BlockLength:
+  Exclude:
+    - 'app/api/**/*'
+
+Lint/MissingSuper:
+  Exclude:
+    - 'app/services/**/*'
