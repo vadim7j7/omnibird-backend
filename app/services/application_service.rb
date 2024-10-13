@@ -1,5 +1,5 @@
 class ApplicationService
-  attr_reader :result, :status
+  attr_reader :result, :status, :params
 
   def initialize(params: {})
     @params = params
@@ -11,7 +11,7 @@ class ApplicationService
   def call
     call!
   rescue StandardError
-    # skip
+    @status = false
   end
 
   def call!

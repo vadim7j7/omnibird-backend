@@ -26,6 +26,8 @@ end
 group :development, :test do
   gem 'brakeman', require: false
 
+  gem 'dotenv-rails'
+
   gem 'debug', platforms: %i[mri windows], require: 'debug/prelude'
 
   gem 'rubocop', require: false
