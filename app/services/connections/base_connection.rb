@@ -70,6 +70,8 @@ module Connections
 
       connection.save!
 
+      @status = false
+
       nil
     end
   end
