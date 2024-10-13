@@ -16,7 +16,8 @@ module Connections
         client_id:,
         redirect_uri:,
         response_type: 'code',
-        scope: scopes.join(' ')
+        scope: scopes.join(' '),
+        **extra_url_params
       }
 
       # Save metadata if connection is present!
@@ -25,10 +26,21 @@ module Connections
       "https://accounts.google.com/o/oauth2/v2/auth?#{url_params.to_query}"
     end
 
+    # @return[Hash]
+    def extra_url_params
+      if connection.email_sender?
+        { access_type: 'offline', prompt: 'consent' }
+      else
+        {}
+      end
+    end
+
     # @return[Array<String>]
     def scopes
       if connection.email_sender?
-        %w[https://www.googleapis.com/auth/gmail.compose]
+        %w[https://www.googleapis.com/auth/userinfo.email
+           https://www.googleapis.com/auth/userinfo.profile
+           https://www.googleapis.com/auth/gmail.compose]
       elsif connection.oauth?
         %w[https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile]
       end

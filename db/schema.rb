@@ -19,7 +19,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_13_054809) do
     t.integer "category", null: false
     t.integer "service", null: false
     t.integer "status", default: 0, null: false
-    t.jsonb "credentials", default: {}
+    t.string "credentials"
     t.jsonb "metadata", default: {}
     t.jsonb "service_source_data", default: {}
     t.jsonb "service_errors"

@@ -6,7 +6,7 @@ class CreateConnections < ActiveRecord::Migration[7.2]
       t.integer :service, null: false
       t.integer :status, null: false, default: 0
 
-      t.jsonb :credentials, default: {}
+      t.string :credentials, default: nil
       t.jsonb :metadata, default: {}
       t.jsonb :service_source_data, default: {}
       t.jsonb :service_errors, default: nil
