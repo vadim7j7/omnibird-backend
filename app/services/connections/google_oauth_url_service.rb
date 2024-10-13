@@ -14,13 +14,13 @@ module Connections
       url_params = {
         state:,
         client_id:,
+        redirect_uri:,
         response_type: 'code',
-        redirect_uri: oauth_redirect_uri,
         scope: scopes.join(' ')
       }
 
       # Save metadata if connection is present!
-      save!(metadata: { oauth_params: url_params }, status: :pending) if connection.present?
+      oauth_params!(data: url_params) if connection.present?
 
       "https://accounts.google.com/o/oauth2/v2/auth?#{url_params.to_query}"
     end
@@ -35,13 +35,13 @@ module Connections
     end
 
     # @return[String]
-    def oauth_redirect_uri
-      "#{ENV.fetch('APP_FULL_URI')}/auth/callback/google"
+    def client_id
+      ENV.fetch('SERVICE_GOOGLE_CLIENT_ID')
     end
 
     # @return[String]
-    def client_id
-      ENV.fetch('SERVICE_GOOGLE_CLIENT_ID')
+    def redirect_uri
+      "#{ENV.fetch('APP_FULL_URI')}/auth/callback/google"
     end
   end
 end

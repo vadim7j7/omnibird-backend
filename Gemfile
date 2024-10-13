@@ -18,6 +18,9 @@ gem 'grape-swagger-entity'
 gem 'grape-swagger-rails'
 gem 'rack-cors'
 
+# Utils
+gem 'httparty', require: false
+
 # Security
 # ...
 

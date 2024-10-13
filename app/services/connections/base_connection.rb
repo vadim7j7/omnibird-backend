@@ -18,7 +18,7 @@ module Connections
     end
 
     # @return[String]
-    def oauth_redirect_uri
+    def redirect_uri
       raise NotImplementedError
     end
 
@@ -26,23 +26,51 @@ module Connections
       raise NotImplementedError
     end
 
+    def client_secret
+      raise NotImplementedError
+    end
+
     def state
       @state ||= SecureRandom.uuid_v7
     end
 
-    # @param[Hash] metadata
-    # @param[Symbol] status
-    def save!(metadata:, status: :pending)
-      connection.metadata = metadata
-      connection.status   = status
+    # @param[Hash] data
+    def oauth_params!(data:)
+      connection.metadata['oauth_params'] = data
+      connection.status                   = :pending
 
-      # Add state as state token for connection and delete that from metadata.
-      if connection.metadata.dig('oauth_params', 'state')
+      if connection.metadata.dig('oauth_params', 'state').present?
         connection.state_token = connection.metadata['oauth_params']['state']
         connection.metadata['oauth_params'].delete('state')
       end
 
       connection.save!
+
+      nil
+    end
+
+    # @param[Hash] credentials
+    # @param[Hash] service_source_data
+    def success_connected!(credentials:, service_source_data:)
+      connection.credentials         = credentials unless credentials.oauth?
+      connection.service_source_data = service_source_data
+      connection.status              = :connected
+      connection.state_token         = nil
+      connection.service_errors      = nil
+
+      connection.save!
+
+      nil
+    end
+
+    # @param[Hash] data
+    def error!(data:)
+      connection.service_source_data = data
+      connection.status              = :failed
+
+      connection.save!
+
+      nil
     end
   end
 end
