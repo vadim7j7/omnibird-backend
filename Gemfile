@@ -6,8 +6,14 @@ gem 'pg', '~> 1.1'
 gem 'puma', '>= 5.0'
 gem 'rails', '~> 7.2.0'
 gem 'tzinfo-data', platforms: %i[windows jruby]
+gem 'sprockets-rails', require: 'sprockets/railtie'
 
 # API
+gem 'grape'
+gem 'grape-entity'
+gem 'grape-swagger', '>= 2.0.1'
+gem 'grape-swagger-entity'
+gem 'grape-swagger-rails'
 gem 'rack-cors'
 
 # Security

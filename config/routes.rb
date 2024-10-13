@@ -1,4 +1,7 @@
 Rails.application.routes.draw do
+  mount(Api => '/')
+  mount(GrapeSwaggerRails::Engine => '/swagger')
+
   get 'up' => 'rails/health#show', as: :rails_health_check
 
   # Render dynamic PWA files from app/views/pwa/*
