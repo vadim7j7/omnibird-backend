@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Connection < ApplicationRecord
   enum :category, %i[oauth email_sender]
   enum :service, %i[google]

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Connections
   class GoogleOauthUrlService < Connections::BaseConnection
     def call!

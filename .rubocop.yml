@@ -2,6 +2,7 @@
 inherit_gem: { rubocop-rails-omakase: rubocop.yml }
 
 require:
+  - rubocop-performance
   - rubocop-rails
 
 # Overwrite or add rules to create your own house style
@@ -17,6 +18,9 @@ AllCops:
     - 'spec/**/*'
     - 'vendor/**/*.rb'
     - 'vendor/bundle/**/*'
+
+Style/FrozenStringLiteralComment:
+  EnforcedStyle: always
 
 Style/StringLiterals:
   EnforcedStyle: single_quotes

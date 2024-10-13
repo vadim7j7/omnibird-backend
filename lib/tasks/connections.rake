@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 namespace :connections do
   desc 'Delete all pending connections that are older than 7 days.'
   task clean_up: :environment do
