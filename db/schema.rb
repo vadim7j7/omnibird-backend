@@ -24,8 +24,10 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_13_054809) do
     t.jsonb "provider_source_data", default: {}
     t.jsonb "provider_errors"
     t.string "state_token", limit: 36
+    t.datetime "expired_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["expired_at"], name: "index_connections_on_expired_at"
     t.index ["state_token"], name: "index_connections_on_state_token"
     t.index ["uuid", "category", "provider"], name: "index_connections_on_uuid_and_category_and_provider", unique: true
   end

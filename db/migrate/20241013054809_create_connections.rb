@@ -13,6 +13,8 @@ class CreateConnections < ActiveRecord::Migration[7.2]
 
       t.string :state_token, limit: 36, null: true, default: nil, index: true
 
+      t.datetime :expired_at, index: true, default: nil
+
       t.timestamps
     end
 

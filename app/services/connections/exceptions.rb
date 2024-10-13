@@ -2,6 +2,7 @@
 
 module Connections
   class Exceptions
-    WrongProviderError = Class.new(StandardError)
+    WrongProviderError       = Class.new(StandardError)
+    InvalidRefreshTokenError = Class.new(StandardError)
   end
 end

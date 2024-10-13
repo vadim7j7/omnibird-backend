@@ -51,7 +51,7 @@ module Connections
 
     # @param[Hash] credentials
     # @param[Hash] source_data
-    def success_connected!(credentials:, source_data:)
+    def success_connected!(credentials:, source_data: {})
       connection.credentials          = credentials.to_json unless connection.oauth?
       connection.provider_source_data = source_data
       connection.status               = :connected
