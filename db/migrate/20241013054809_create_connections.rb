@@ -11,7 +11,7 @@ class CreateConnections < ActiveRecord::Migration[7.2]
       t.jsonb :service_source_data, default: {}
       t.jsonb :service_errors, default: nil
 
-      t.string :stage_token, limit: 36, null: true, default: nil, index: true
+      t.string :state_token, limit: 36, null: true, default: nil, index: true
 
       t.timestamps
     end

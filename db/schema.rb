@@ -23,10 +23,10 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_13_054809) do
     t.jsonb "metadata", default: {}
     t.jsonb "service_source_data", default: {}
     t.jsonb "service_errors"
-    t.string "stage_token", limit: 36
+    t.string "state_token", limit: 36
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["stage_token"], name: "index_connections_on_stage_token"
+    t.index ["state_token"], name: "index_connections_on_state_token"
     t.index ["uuid_service", "category", "service"], name: "index_connections_on_uuid_service_and_category_and_service", unique: true
   end
 end

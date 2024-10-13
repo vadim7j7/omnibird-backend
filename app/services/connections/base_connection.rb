@@ -24,21 +24,21 @@ module Connections
       raise NotImplementedError
     end
 
-    def stage
-      @stage ||= SecureRandom.uuid_v7
+    def state
+      @state ||= SecureRandom.uuid_v7
     end
 
     # @param[Hash] metadata
     # @param[Symbol] status
     def save!(metadata:, status: :pending)
-      # Add stage as stage token for connection and delete that from metadata.
-      if metadata.dig(:oauth_params, :stage)
-        connection.stage_token = metadata[:oauth_params][:stage]
-        metadata[:oauth_params].delete(:stage)
-      end
-
       connection.metadata = metadata
       connection.status   = status
+
+      # Add state as state token for connection and delete that from metadata.
+      if connection.metadata.dig('oauth_params', 'state')
+        connection.state_token = connection.metadata['oauth_params']['state']
+        connection.metadata['oauth_params'].delete('state')
+      end
 
       connection.save!
     end

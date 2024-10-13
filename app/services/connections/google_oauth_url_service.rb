@@ -1,5 +1,5 @@
 module Connections
-  class GoogleOauthService < Connections::BaseConnection
+  class GoogleOauthUrlService < Connections::BaseConnection
     def call!
       @result = { oauth_url: }
 
@@ -10,7 +10,7 @@ module Connections
 
     def oauth_url
       url_params = {
-        stage:,
+        state:,
         client_id:,
         response_type: 'code',
         redirect_uri: oauth_redirect_uri,
