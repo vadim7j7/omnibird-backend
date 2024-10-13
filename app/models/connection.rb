@@ -4,12 +4,12 @@ class Connection < ApplicationRecord
   encrypts(:credentials)
 
   enum :category, %i[oauth email_sender]
-  enum :service, %i[google]
+  enum :provider, %i[google]
   enum :status, %i[pending connected failed]
 
-  validates :category, :service, presence: true
-  validates :uuid_service, presence: true, if: -> { connected? }
-  validates :uuid_service, uniqueness: { scope: %i[category service] }
+  validates :category, :provider, presence: true
+  validates :uuid, presence: true, if: -> { connected? }
+  validates :uuid, uniqueness: { scope: %i[category provider] }
 
   def credentials_parsed
     return {} if credentials.blank?

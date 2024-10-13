@@ -15,18 +15,18 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_13_054809) do
   enable_extension "plpgsql"
 
   create_table "connections", force: :cascade do |t|
-    t.string "uuid_service"
+    t.string "uuid"
     t.integer "category", null: false
-    t.integer "service", null: false
+    t.integer "provider", null: false
     t.integer "status", default: 0, null: false
     t.string "credentials"
     t.jsonb "metadata", default: {}
-    t.jsonb "service_source_data", default: {}
-    t.jsonb "service_errors"
+    t.jsonb "provider_source_data", default: {}
+    t.jsonb "provider_errors"
     t.string "state_token", limit: 36
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["state_token"], name: "index_connections_on_state_token"
-    t.index ["uuid_service", "category", "service"], name: "index_connections_on_uuid_service_and_category_and_service", unique: true
+    t.index ["uuid", "category", "provider"], name: "index_connections_on_uuid_and_category_and_provider", unique: true
   end
 end

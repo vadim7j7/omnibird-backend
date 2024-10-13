@@ -3,6 +3,8 @@
 module Connections
   class GoogleOauthUrlService < Connections::BaseConnection
     def call!
+      validate!(provider: :google)
+
       @result = { oauth_url: }
 
       nil

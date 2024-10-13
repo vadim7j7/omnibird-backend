@@ -7,6 +7,8 @@ module Connections
     attr_reader :credentials
 
     def call!
+      validate!(provider: :google)
+
       response = HTTParty.post(
         'https://accounts.google.com/o/oauth2/token',
         body:,
@@ -16,6 +18,8 @@ module Connections
       save_response!(data: response.parsed_response, code: response.code)
       get_and_save_user_info! if credentials.present?
     end
+
+    private
 
     # @return[Hash]
     def body
@@ -58,7 +62,7 @@ module Connections
 
       if response.code == 200
         data = response.parsed_response
-        connection.uuid_service = data['id']
+        connection.uuid = data['id']
         save_source_data!(data:)
       else
         error!(data: { token: response.parsed_response.dig('error', 'message') })
@@ -70,7 +74,7 @@ module Connections
     def save_source_data!(data:)
       success_connected!(
         credentials:,
-        service_source_data: {
+        source_data: {
           avatar: data['picture'],
           email: data['email'],
           first_name: data['given_name'],

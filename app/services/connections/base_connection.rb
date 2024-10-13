@@ -50,13 +50,13 @@ module Connections
     end
 
     # @param[Hash] credentials
-    # @param[Hash] service_source_data
-    def success_connected!(credentials:, service_source_data:)
-      connection.credentials         = credentials.to_json unless connection.oauth?
-      connection.service_source_data = service_source_data
-      connection.status              = :connected
-      connection.state_token         = nil
-      connection.service_errors      = nil
+    # @param[Hash] source_data
+    def success_connected!(credentials:, source_data:)
+      connection.credentials          = credentials.to_json unless connection.oauth?
+      connection.provider_source_data = source_data
+      connection.status               = :connected
+      connection.state_token          = nil
+      connection.provider_errors      = nil
 
       connection.save!
 
@@ -65,7 +65,7 @@ module Connections
 
     # @param[Hash] data
     def error!(data:)
-      connection.service_source_data = data
+      connection.provider_source_data = data
       connection.status              = :failed
 
       connection.save!
@@ -73,6 +73,15 @@ module Connections
       @status = false
 
       nil
+    end
+
+    # @param[Symbol] provider
+    def validate!(provider:)
+      return if connection.provider.to_sym == provider
+
+      message = "#{self.class.name} doesn't support '#{connection.provider || 'unknown'}' provider"
+
+      raise Connections::Exceptions::WrongProviderError, message
     end
   end
 end
