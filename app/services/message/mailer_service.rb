@@ -1,13 +1,14 @@
 # frozen_string_literal: true
 
 module Message
-  class MailerService
+  class MailerService < ApplicationService
     require 'mime/types'
 
-    attr_reader :params, :message, :body_type
+    attr_reader :message, :body_type
 
     def initialize(params: {}, body_type: :html)
-      @params    = params
+      super(params:)
+
       @body_type = body_type
       @message   = Mail.new
     end
@@ -25,10 +26,27 @@ module Message
 
       add_body!
       add_attachments!
+
+      validate!
+
+      nil
     end
 
     def as_string
       Base64.urlsafe_encode64(message.to_s)
+    end
+
+    def validate!
+      errors = {}
+      errors[:from] = 'cannot be blank' if message.from.blank?
+      errors[:to] = 'cannot be blank' if message.to.blank?
+      errors[:subject] = 'cannot be blank' if message.subject.blank?
+      return if errors.blank?
+
+      @result = { errors: }
+      @status = false
+
+      nil
     end
 
     private
