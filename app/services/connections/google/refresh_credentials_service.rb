@@ -30,7 +30,7 @@ module Connections
       def refresh_token
         @refresh_token ||=
           connection
-            .credentials_parsed[:refresh_token]
+          .credentials_parsed[:refresh_token]
       end
     end
   end
