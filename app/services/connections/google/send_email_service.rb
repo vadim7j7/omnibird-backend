@@ -3,9 +3,22 @@
 module Connections
   module Google
     class SendEmailService < Connections::BaseConnection
+      require 'httparty'
+
       def call!
         validate!(provider: :google)
         validate_connection!
+
+        response = HTTParty.post('https://gmail.googleapis.com/gmail/v1/users/me/messages/send', body:, headers:)
+
+        if response.success?
+          @result = response.parsed_response
+        else
+          @result[:error] = response.parsed_response['error']
+          @status = false
+        end
+
+        nil
       end
 
       private
@@ -29,6 +42,10 @@ module Connections
       def headers
         { Authorization: "#{token_type} #{access_token}",
           'Content-Type': 'application/json' }
+      end
+
+      def body
+        { raw: params[:encoded_message] }.to_json
       end
     end
   end
