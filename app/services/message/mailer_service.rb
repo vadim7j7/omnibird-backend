@@ -15,12 +15,13 @@ module Message
     def call
       message.from        = params[:from]
       message.to          = params[:to]
-      message.reply_to    = params[:reply_to]
-      message.bcc         = params[:bcc]
-      message.cc          = params[:cc]
-      message.in_reply_to = params[:in_reply_to]
+      message.reply_to    = params[:reply_to] if params[:reply_to].present?
+      message.bcc         = params[:bcc] if params[:bcc].present?
+      message.cc          = params[:cc] if params[:cc].present?
+      message.in_reply_to = params[:in_reply_to] if params[:in_reply_to].present?
       message.references  = references
       message.subject     = subject
+      message.message_id  = message_id
 
       add_body!
       add_attachments!
@@ -94,6 +95,18 @@ module Message
       message.add_part(attachment)
 
       nil
+    end
+
+    # @return[String]
+    def message_id
+      return @message_id if @message_id.present?
+
+      email = message.from&.first
+      return if email.blank?
+
+      domain = email.split('@').last
+
+      @message_id = "#{SecureRandom.hex(16)}@mail.#{domain}"
     end
   end
 end
