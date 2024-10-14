@@ -1,20 +1,26 @@
 # frozen_string_literal: true
 
-class Message
+module Message
   class MailerService
     require 'mime/types'
 
     attr_reader :params, :message, :body_type
 
     def initialize(params: {}, body_type: :html)
-      @message   = Mail.new
+      @params    = params
       @body_type = body_type
+      @message   = Mail.new
     end
 
     def call
-      message.from    = params[:from]
-      message.to      = params[:to]
-      message.subject = params[:subject]
+      message.from        = params[:from]
+      message.to          = params[:to]
+      message.reply_to    = params[:reply_to]
+      message.bcc         = params[:bcc]
+      message.cc          = params[:cc]
+      message.in_reply_to = params[:in_reply_to]
+      message.references  = references
+      message.subject     = subject
 
       add_body!
       add_attachments!
@@ -25,6 +31,26 @@ class Message
     end
 
     private
+
+    # @return[String]
+    def subject
+      if params[:in_reply_to].present?
+        "Re: #{params[:subject] || 'No Subject'}"
+      else
+        params[:subject] || 'No Subject'
+      end
+    end
+
+    # @return[String]
+    def references
+      return if params[:in_reply_to].blank?
+
+      if params[:references].present?
+        (params[:references] + [ params[:in_reply_to] ]).uniq.join(' ')
+      else
+        params[:in_reply_to]
+      end
+    end
 
     def add_body!
       return if params[:body].blank?
@@ -46,7 +72,10 @@ class Message
 
       params[:attachments].map do |item|
         add_attachment!(file_path: item) if item.is_a?(String)
+        add_attachment!(file_path: item.path) if item.is_a?(File) || item.is_a?(Tempfile)
       end
+
+      nil
     end
 
     # @param[String] file_path
@@ -63,6 +92,8 @@ class Message
       attachment.body                      = Base64.encode64(File.read(file_path))
 
       message.add_part(attachment)
+
+      nil
     end
   end
 end
