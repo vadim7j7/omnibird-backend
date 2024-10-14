@@ -2,7 +2,7 @@
 
 module Connections
   module Google
-    class RefreshCredentialsService < Connections::Google::BaseService
+    class RefreshCredentialsService < Connections::Google::AuthBaseService
       require 'httparty'
 
       attr_reader :credentials

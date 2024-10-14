@@ -2,7 +2,7 @@
 
 module Connections
   module Google
-    class BaseService < Connections::BaseConnection
+    class AuthBaseService < Connections::BaseConnection
 
       private
 

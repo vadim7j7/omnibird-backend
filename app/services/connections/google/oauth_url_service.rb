@@ -2,7 +2,7 @@
 
 module Connections
   module Google
-    class OauthUrlService < Connections::Google::BaseService
+    class OauthUrlService < Connections::Google::AuthBaseService
       def call!
         validate!(provider: :google)
 

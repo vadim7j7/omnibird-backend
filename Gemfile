@@ -20,6 +20,7 @@ gem 'rack-cors'
 
 # Utils
 gem 'httparty', require: false
+gem 'mime-types', require: false
 
 # Security
 # ...
