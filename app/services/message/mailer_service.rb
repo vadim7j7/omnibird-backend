@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Message
   class MailerService
     require 'mime/types'

@@ -3,7 +3,6 @@
 module Connections
   module Google
     class AuthBaseService < Connections::BaseConnection
-
       private
 
       # @return[String]

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Connections
   module Google
     class SendEmailService < Connections::BaseConnection
