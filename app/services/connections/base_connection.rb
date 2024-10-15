@@ -65,8 +65,8 @@ module Connections
 
     # @param[Hash] data
     def error!(data:)
-      connection.provider_source_data = data
-      connection.status              = :failed
+      connection.provider_errors = data
+      connection.status          = :failed
 
       connection.save!
 

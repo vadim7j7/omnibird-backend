@@ -6,7 +6,7 @@ RSpec.describe(Connections::Google::OauthUrlService, type: :service) do
   describe 'Sign in/up oAuth url' do
     let!(:connection) { build(:google_oauth) }
 
-    subject { Connections::Google::OauthUrlService.new(connection:) }
+    subject { described_class.new(connection:) }
     before { subject.call! }
 
     context 'URI Query' do
@@ -24,7 +24,7 @@ RSpec.describe(Connections::Google::OauthUrlService, type: :service) do
   describe 'Integration send email oAuth url' do
     let!(:connection) { build(:google_email_sender) }
 
-    subject { Connections::Google::OauthUrlService.new(connection:) }
+    subject { described_class.new(connection:) }
     before { subject.call! }
 
     let!(:url_params) { Rack::Utils.parse_query(URI.parse(subject.result[:oauth_url]).query).deep_symbolize_keys }
@@ -42,7 +42,7 @@ RSpec.describe(Connections::Google::OauthUrlService, type: :service) do
   describe 'validate provider' do
     let!(:connection) { build(:connection, category: :oauth, provider: :microsoft_outlook) }
 
-    subject { Connections::Google::OauthUrlService.new(connection:) }
+    subject { described_class.new(connection:) }
 
     it { expect { subject.call! }.to raise_error(Connections::Exceptions::WrongProviderError)  }
   end

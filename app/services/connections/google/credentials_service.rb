@@ -46,7 +46,7 @@ module Connections
           connection.uuid = data['id']
           save_source_data!(data:)
         else
-          error!(data: { token: response.parsed_response.dig('error', 'message') })
+          error!(data: { user_info: response.parsed_response.dig('error', 'message') })
         end
 
         nil
