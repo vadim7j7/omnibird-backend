@@ -17,6 +17,7 @@ RSpec.describe(Connections::Google::OauthUrlService, type: :service) do
       it { expect(url_params[:redirect_uri]).to include('auth/callback/google') }
       it { expect(url_params[:scope]).to eq('https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile') }
       it { expect(url_params[:state]).to be_present }
+      it { expect(subject.connection.persisted?).to be_truthy }
     end
   end
 
@@ -35,5 +36,6 @@ RSpec.describe(Connections::Google::OauthUrlService, type: :service) do
     it { expect(url_params[:redirect_uri]).to include('auth/callback/google') }
     it { expect(url_params[:scope]).to eq('https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/gmail.compose https://www.googleapis.com/auth/gmail.readonly') }
     it { expect(url_params[:state]).to be_present }
+    it { expect(subject.connection.persisted?).to be_truthy }
   end
 end
