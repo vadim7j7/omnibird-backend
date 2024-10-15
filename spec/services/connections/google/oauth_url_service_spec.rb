@@ -38,4 +38,12 @@ RSpec.describe(Connections::Google::OauthUrlService, type: :service) do
     it { expect(url_params[:state]).to be_present }
     it { expect(subject.connection.persisted?).to be_truthy }
   end
+
+  describe 'validate provider' do
+    let!(:connection) { build(:connection, category: :oauth, provider: :microsoft_outlook) }
+
+    subject { Connections::Google::OauthUrlService.new(connection:) }
+
+    it { expect { subject.call! }.to raise_error(Connections::Exceptions::WrongProviderError)  }
+  end
 end

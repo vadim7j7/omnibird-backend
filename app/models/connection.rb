@@ -4,7 +4,7 @@ class Connection < ApplicationRecord
   encrypts(:credentials)
 
   enum :category, %i[oauth email_sender]
-  enum :provider, %i[google]
+  enum :provider, %i[google microsoft_outlook]
   enum :status, %i[pending connected failed]
 
   validates :category, :provider, presence: true
