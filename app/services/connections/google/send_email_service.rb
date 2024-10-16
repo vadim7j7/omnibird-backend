@@ -10,11 +10,10 @@ module Connections
         validate_connection!
 
         response = HTTParty.post('https://gmail.googleapis.com/gmail/v1/users/me/messages/send', body:, headers:)
-
         if response.success?
-          @result = response.parsed_response
+          @result[:api_message] = response.parsed_response.deep_symbolize_keys
         else
-          @result[:error] = response.parsed_response['error']
+          @result = response.parsed_response.deep_symbolize_keys
           @status = false
         end
 
