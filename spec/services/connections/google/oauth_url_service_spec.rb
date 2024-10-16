@@ -40,7 +40,7 @@ RSpec.describe(Connections::Google::OauthUrlService, type: :service) do
   end
 
   describe 'validate provider' do
-    let!(:connection) { build(:connection, category: :oauth, provider: :microsoft_outlook) }
+    let!(:connection) { build(:connection, category: :oauth, provider: :microsoft) }
 
     subject { described_class.new(connection:) }
 

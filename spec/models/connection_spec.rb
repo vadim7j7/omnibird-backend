@@ -26,7 +26,7 @@ RSpec.describe(Connection, type: :model) do
     subject { connection }
 
     it { is_expected.to define_enum_for(:category).with_values(oauth: 0, email_sender: 1)}
-    it { is_expected.to define_enum_for(:provider).with_values(google: 0, microsoft_outlook: 1)}
+    it { is_expected.to define_enum_for(:provider).with_values(google: 0, microsoft: 1)}
     it { is_expected.to define_enum_for(:status).with_values(pending: 0, connected: 1, failed: 2)}
   end
 
