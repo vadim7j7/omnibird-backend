@@ -23,7 +23,7 @@ RSpec.describe(Connections::Google::RefreshCredentialsService, type: :service) d
         { 'access_token' => 'new_access_token',
           'token_type' => 'Bearer',
           'expires_in' => 3600,
-          'refresh_token' => 'valid_refresh_token' }
+          'refresh_token' => 'new_refresh_token' }
       end
 
       let(:http_success_response) do
@@ -54,7 +54,7 @@ RSpec.describe(Connections::Google::RefreshCredentialsService, type: :service) d
 
           # Check that credentials are saved after success
           expect(service.credentials[:access_token]).to eq('new_access_token')
-          expect(service.credentials[:refresh_token]).to eq('valid_refresh_token')
+          expect(service.credentials[:refresh_token]).to eq('new_refresh_token')
         end
       end
 
