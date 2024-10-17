@@ -32,10 +32,9 @@ module Connections
       # @return[Array<String>]
       def scopes
         if connection.email_sender?
-          %w[openid profile email offline_access
-             https://outlook.office.com/mail.read https://outlook.office.com/mail.send]
+          %w[openid profile email offline_access User.Read Mail.Read Mail.Send]
         elsif connection.oauth?
-          %w[openid profile email]
+          %w[openid profile email User.Read]
         end
       end
 

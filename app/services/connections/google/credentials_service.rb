@@ -5,37 +5,23 @@ module Connections
     class CredentialsService < Connections::Google::AuthBaseService
       require 'httparty'
 
-      attr_reader :credentials
+      prepend Connections::Helpers::IssueToken
+      prepend Connections::Helpers::SaveToken
+
+      TOKEN_URL = 'https://accounts.google.com/o/oauth2/token'.freeze
 
       def call!
         validate!(provider: :google)
 
-        response = HTTParty.post(
-          'https://accounts.google.com/o/oauth2/token',
-          body:,
-          headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
-        )
+        response = token_data(url: TOKEN_URL)
 
-        save_response!(data: response.parsed_response, code: response.code)
+        save_response!(**response)
         get_and_save_user_info! if credentials.present?
+
+        nil
       end
 
       private
-
-      # @return[Hash]
-      def body
-        { client_id:,
-          client_secret:,
-          redirect_uri:,
-          grant_type: 'authorization_code',
-          code: params[:code] }
-      end
-
-      def redirect_uri
-        connection
-          .metadata
-          .dig('oauth_params', 'redirect_uri')
-      end
 
       def get_and_save_user_info!
         headers = { Authorization: "#{credentials[:token_type]} #{credentials[:access_token]}" }
