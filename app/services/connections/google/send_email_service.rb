@@ -5,6 +5,8 @@ module Connections
     class SendEmailService < Connections::BaseConnection
       require 'httparty'
 
+      prepend Connections::Helpers::Authorization
+
       def call!
         validate!(provider: :google)
         validate_connection!
@@ -26,21 +28,6 @@ module Connections
         return if connection.email_sender?
 
         raise Connections::Exceptions::WrongCategoryError, "#{self.class.name} doesn't support #{connection.category}"
-      end
-
-      # @return[String]
-      def access_token
-        @access_token ||= connection.credentials_parsed[:access_token]
-      end
-
-      def token_type
-        @token_type ||= connection.credentials_parsed[:token_type]
-      end
-
-      # @return[Hash]
-      def headers
-        { Authorization: "#{token_type} #{access_token}",
-          'Content-Type': 'application/json' }
       end
 
       def body
