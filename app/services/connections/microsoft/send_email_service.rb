@@ -53,12 +53,14 @@ module Connections
             ccRecipients: recipients(key: :cc),
             bccRecipients: recipients(key: :bcc),
             replyTo: recipients(key: :reply_to),
-            attachments: []
+            attachments: [],
+            internetMessageHeaders: []
           },
           saveToSentItems: true
         }
 
         add_attachments!
+        add_to_thread!
 
         nil
       end
@@ -74,6 +76,12 @@ module Connections
         items.map { |address| { emailAddress: { address: } } }
       end
 
+      def add_custom_headers!
+        mailer_service.message.headers.each do |name, value|
+          @email_body_payload[:message][:internetMessageHeaders] << { name:, value: }
+        end
+      end
+
       def add_attachments!
         return if mailer_service.message.attachments.blank?
 
@@ -85,6 +93,22 @@ module Connections
             contentBytes: Base64.encode64(attachment.body.decoded)
           }
         end
+
+        nil
+      end
+
+      def add_to_thread!
+        return if mailer_service.message.in_reply_to.blank? || mailer_service.message.references.blank?
+
+        @email_body_payload[:message][:internetMessageHeaders] << {
+          name: 'In-Reply-To',
+          value: "<#{mailer_service.message.in_reply_to}>"
+        }
+
+        @email_body_payload[:message][:internetMessageHeaders] << {
+          name: 'References',
+          value: mailer_service.message.references&.map { |r| "<#{r}>" }.join(' ')
+        }
 
         nil
       end
