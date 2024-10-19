@@ -62,15 +62,6 @@ RSpec.describe(Message::MailerService, type: :service) do
       end
     end
 
-    context 'when from is missing' do
-      let(:params) { super().merge(from: nil) }
-
-      it 'fails validation' do
-        service.call
-        expect(service.instance_variable_get(:@result)[:errors][:from]).to eq('cannot be blank')
-      end
-    end
-
     context 'when to is missing' do
       let(:params) { super().merge(to: nil) }
 

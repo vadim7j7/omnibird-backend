@@ -52,7 +52,7 @@ module Connections
     # @param[Hash] credentials
     # @param[Hash] source_data
     def success_connected!(credentials:, source_data: {})
-      connection.credentials          = credentials.to_json unless connection.oauth?
+      connection.credentials          = credentials.to_json if credentials.present? && !connection.oauth?
       connection.provider_source_data = source_data if source_data.present?
       connection.status               = :connected
       connection.state_token          = nil
@@ -82,6 +82,12 @@ module Connections
       message = "#{self.class.name} doesn't support '#{connection.provider || 'unknown'}' provider"
 
       raise Connections::Exceptions::WrongProviderError, message
+    end
+
+    def validate_access_token!
+      return unless connection.expired?
+
+      raise Connections::Exceptions::AccessTokenExpiredError, 'access token is expired'
     end
   end
 end

@@ -23,7 +23,7 @@ FactoryBot.define do
       category { :email_sender }
       provider { :google }
 
-      expired_at { Faker::Omniauth.google[:credentials][:expires_at] }
+      expired_at { Time.at(Faker::Omniauth.google[:credentials][:expires_at]) }
 
       credentials do
         data = Faker::Omniauth.google

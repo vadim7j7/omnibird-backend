@@ -52,6 +52,7 @@ module Connections
             toRecipients: recipients,
             ccRecipients: recipients(key: :cc),
             bccRecipients: recipients(key: :bcc),
+            replyTo: recipients(key: :reply_to),
             attachments: []
           },
           saveToSentItems: true
@@ -65,7 +66,7 @@ module Connections
       # @param[Symbol] key
       # @return[Array<Hash>]
       def recipients(key: :to)
-        return [] if %i[to bcc cc].exclude?(key)
+        return [] if %i[to bcc cc reply_to].exclude?(key)
 
         items = mailer_service.message.send(key)
         return [] if items.blank?

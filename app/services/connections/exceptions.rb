@@ -5,5 +5,6 @@ module Connections
     WrongProviderError       = Class.new(StandardError)
     WrongCategoryError       = Class.new(StandardError)
     InvalidRefreshTokenError = Class.new(StandardError)
+    AccessTokenExpiredError  = Class.new(StandardError)
   end
 end

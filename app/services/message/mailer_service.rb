@@ -38,7 +38,7 @@ module Message
 
     def validate!
       errors = {}
-      errors[:from] = 'cannot be blank' if message.from.blank?
+      # errors[:from] = 'cannot be blank' if message.from.blank?
       errors[:to] = 'cannot be blank' if message.to.blank?
       errors[:subject] = 'cannot be blank' if message.subject.blank?
       return if errors.blank?
