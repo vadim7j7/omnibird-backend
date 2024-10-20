@@ -44,12 +44,14 @@ RSpec.describe(Connections::Google::RefreshCredentialsService, type: :service) d
 
       context 'when the refresh token is valid' do
         it 'makes a POST request to refresh the token and saves the response' do
+          prev_refresh_token = connection.credentials_parsed[:refresh_token]
+
           service.call!
 
           # Check that the HTTParty.post request was made
           expect(HTTParty).to have_received(:post).with(
             token_url,
-            body: hash_including(refresh_token: connection.credentials_parsed[:refresh_token])
+            body: hash_including(refresh_token: prev_refresh_token)
           )
 
           # Check that credentials are saved after success
