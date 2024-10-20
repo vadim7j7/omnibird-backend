@@ -59,7 +59,7 @@ namespace :microsoft_sandbox do
 
   desc 'Get latest email details by subject and email to'
   task latest_email: :environment do
-    email_to = ENV.fetch('EMAIL_TO')
+    email_to = ENV.fetch('TO')
     subject  = ENV.fetch('SUBJECT')
 
     connection = Connection.connected.find_by!(category: :email_sender, provider: :microsoft)
