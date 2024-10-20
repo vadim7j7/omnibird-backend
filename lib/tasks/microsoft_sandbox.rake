@@ -1,29 +1,29 @@
 # frozen_string_literal: true
 
 # rubocop:disable Metrics/BlockLength:
-namespace :google_sandbox do
-  desc 'Get oAuth sending email url for google'
+namespace :microsoft_sandbox do
+  desc 'Get oAuth sending email url for microsoft'
   task oauth_url: :environment do
-    connection = Connection.find_or_create_by!(category: :email_sender, provider: :google)
-    service = Connections::Google::OauthUrlService.new(connection:)
+    connection = Connection.find_or_create_by!(category: :email_sender, provider: :microsoft)
+    service = Connections::Microsoft::OauthUrlService.new(connection:)
     service.call!
 
     puts service.result[:oauth_url].inspect
   end
 
-  desc 'Get credentials by code and state from google'
+  desc 'Get credentials by code and state from microsoft'
   task code_to_token: :environment do
     code  = ENV.fetch('CODE')
     state = ENV.fetch('STATE')
 
     connection = Connection.find_by!(state_token: state)
-    service    = Connections::Google::CredentialsService.new(connection:, params: { code: })
+    service    = Connections::Microsoft::CredentialsService.new(connection:, params: { code: })
     service.call!
 
     puts service.credentials.inspect
   end
 
-  desc 'Send email via gmail'
+  desc 'Send email via microsoft (outlook)'
   task send_email: :environment do
     email_to    = ENV.fetch('TO')
     subject     = ENV.fetch('SUBJECT', 'Testing')
@@ -41,16 +41,16 @@ namespace :google_sandbox do
     )
     mailer_service.call
 
-    connection = Connection.connected.find_by!(category: :email_sender, provider: :google)
+    connection = Connection.connected.find_by!(category: :email_sender, provider: :microsoft)
     if connection.expired?
-      service = Connections::Google::RefreshCredentialsService.new(connection:)
+      service = Connections::Microsoft::RefreshCredentialsService.new(connection:)
       service.call!
       connection.reload
     end
 
-    service = Connections::Google::SendEmailService.new(
+    service = Connections::Microsoft::SendEmailService.new(
       connection:,
-      params: { encoded_message: mailer_service.as_string }
+      params: { mailer_service: }
     )
     service.call!
 

@@ -9,7 +9,8 @@ module Connections
 
       attr_reader :email_body_payload
 
-      SEND_EMAIL_URL = 'https://graph.microsoft.com/v1.0/me/sendMail'.freeze
+      SEND_EMAIL_URL  = 'https://graph.microsoft.com/v1.0/me/sendMail'.freeze
+      REPLY_EMAIL_URL = 'https://graph.microsoft.com/v1.0/me/messages/{messageId}/reply'.freeze
 
       def call!
         validate!(provider: :microsoft)
@@ -17,7 +18,7 @@ module Connections
 
         build_email_body!
 
-        response = HTTParty.post(SEND_EMAIL_URL, body: email_body_payload.to_json, headers:)
+        response = HTTParty.post(send_url, body: email_body_payload.to_json, headers:)
         if response.success?
           @status = true
         else
@@ -29,6 +30,14 @@ module Connections
       end
 
       private
+
+      def send_url
+        if mailer_service.message.in_reply_to.present?
+          REPLY_EMAIL_URL.sub('{messageId}', mailer_service.message.in_reply_to)
+        else
+          SEND_EMAIL_URL
+        end
+      end
 
       def validate_connection!
         return if connection.email_sender?
@@ -48,32 +57,34 @@ module Connections
             body: {
               contentType: mailer_service.body_type == :html ? 'HTML' : 'Text',
               content: mailer_service.message.html_part.body.raw_source
-            },
-            toRecipients: recipients,
-            ccRecipients: recipients(key: :cc),
-            bccRecipients: recipients(key: :bcc),
-            replyTo: recipients(key: :reply_to),
-            attachments: [],
-            internetMessageHeaders: []
+            }
           },
           saveToSentItems: true
         }
 
+        add_recipients!
         add_attachments!
-        add_to_thread!
 
         nil
       end
 
+      def add_recipients!
+        recipients(to_key: :toRecipients, key: :to)
+        recipients(to_key: :ccRecipients, key: :cc)
+        recipients(to_key: :bccRecipients, key: :bcc)
+        recipients(to_key: :replyTo, key: :reply_to)
+      end
+
+      # @param[Symbol] to_key
       # @param[Symbol] key
       # @return[Array<Hash>]
-      def recipients(key: :to)
+      def recipients(to_key:, key: :to)
         return [] if %i[to bcc cc reply_to].exclude?(key)
 
         items = mailer_service.message.send(key)
         return [] if items.blank?
 
-        items.map { |address| { emailAddress: { address: } } }
+        @email_body_payload[:message][to_key] = items.map { |address| { emailAddress: { address: } } }
       end
 
       def add_custom_headers!
@@ -85,30 +96,13 @@ module Connections
       def add_attachments!
         return if mailer_service.message.attachments.blank?
 
-        mailer_service.message.attachments.map do |attachment|
-          @email_body_payload[:attachments] << {
-            '@odata.type': '#microsoft.graph.fileAttachment',
-            name: attachment.filename,
-            contentType: attachment.content_type,
-            contentBytes: Base64.encode64(attachment.body.decoded)
-          }
-        end
-
-        nil
-      end
-
-      def add_to_thread!
-        return if mailer_service.message.in_reply_to.blank? || mailer_service.message.references.blank?
-
-        @email_body_payload[:message][:internetMessageHeaders] << {
-          name: 'In-Reply-To',
-          value: "<#{mailer_service.message.in_reply_to}>"
-        }
-
-        @email_body_payload[:message][:internetMessageHeaders] << {
-          name: 'References',
-          value: mailer_service.message.references&.map { |r| "<#{r}>" }.join(' ')
-        }
+        @email_body_payload[:message][:attachments] =
+          mailer_service.message.attachments.map do |attachment|
+            { '@odata.type': '#microsoft.graph.fileAttachment',
+              name: attachment.filename,
+              contentType: attachment.content_type,
+              contentBytes: Base64.encode64(attachment.body.decoded) }
+          end
 
         nil
       end
