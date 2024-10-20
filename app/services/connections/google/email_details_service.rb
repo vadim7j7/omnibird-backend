@@ -19,8 +19,8 @@ module Connections
         url = MESSAGE_URL.sub('{messageId}', params[:message_id])
         response = HTTParty.get(url, headers:)
 
-        @result = response.parsed_response.deep_symbolize_keys
         @status = response.success?
+        @result[:source_data] = response.parsed_response.deep_symbolize_keys
       end
     end
   end

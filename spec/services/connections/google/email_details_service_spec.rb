@@ -37,7 +37,7 @@ RSpec.describe(Connections::Google::EmailDetailsService, type: :service) do
       it 'validates the connection and returns email details' do
         service.call!
 
-        expect(service.result).to eq(api_response.deep_symbolize_keys)
+        expect(service.result[:source_data]).to eq(api_response.deep_symbolize_keys)
         expect(service.status).to be true
       end
     end
@@ -59,7 +59,7 @@ RSpec.describe(Connections::Google::EmailDetailsService, type: :service) do
       it 'handles the error response correctly' do
         service.call!
 
-        expect(service.result[:error][:message]).to eq('Invalid id value')
+        expect(service.result[:source_data][:error][:message]).to eq('Invalid id value')
         expect(service.status).to be false
       end
     end
