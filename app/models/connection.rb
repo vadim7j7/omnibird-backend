@@ -15,7 +15,7 @@ class Connection < ApplicationRecord
   def credentials_parsed
     return {} if credentials.blank?
 
-    @credentials_parsed ||= JSON.parse(credentials).deep_symbolize_keys
+    JSON.parse(credentials).deep_symbolize_keys
   rescue JSON::ParserError
     {}
   end

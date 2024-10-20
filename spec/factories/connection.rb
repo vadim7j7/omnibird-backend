@@ -33,5 +33,25 @@ FactoryBot.define do
           refresh_token: data[:credentials][:refresh_token] }.to_json
       end
     end
+
+    factory :microsoft_oauth do
+      category { :oauth }
+      provider { :microsoft }
+    end
+
+    factory :microsoft_email_sender do
+      category { :email_sender }
+      provider { :microsoft }
+
+      expired_at { Time.at(Faker::Omniauth.google[:credentials][:expires_at]) }
+
+      credentials do
+        data = Faker::Omniauth.google
+
+        { token_type: 'Bearer',
+          access_token: data[:credentials][:token],
+          refresh_token: data[:credentials][:refresh_token] }.to_json
+      end
+    end
   end
 end
