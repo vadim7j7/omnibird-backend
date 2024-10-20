@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
 # rubocop:disable Metrics/BlockLength:
-namespace :sandbox do
-  desc 'Get gmail oAuth sending email url'
-  task google_oatuh_url: :environment do
+namespace :google_sandbox do
+  desc 'Get gmail oAuth sending email url for google'
+  task oauth_url: :environment do
     connection = Connection.find_or_create_by!(category: :email_sender, provider: :google)
     service = Connections::Google::OauthUrlService.new(connection:)
     service.call!
@@ -11,8 +11,8 @@ namespace :sandbox do
     puts service.result[:oauth_url].inspect
   end
 
-  desc 'Get credentials by code and state'
-  task google_code_to_token: :environment do
+  desc 'Get credentials by code and state from google'
+  task code_to_token: :environment do
     code  = ENV.fetch('CODE')
     state = ENV.fetch('STATE')
 
@@ -23,8 +23,8 @@ namespace :sandbox do
     puts service.credentials.inspect
   end
 
-  desc 'Send gmail email'
-  task send_gmail_email: :environment do
+  desc 'Send email via gmail'
+  task send_email: :environment do
     email_to    = ENV.fetch('TO')
     subject     = ENV.fetch('SUBJECT', 'Testing')
     attachment  = ENV['FILE_URL']
