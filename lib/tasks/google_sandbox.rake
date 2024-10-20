@@ -45,7 +45,7 @@ namespace :google_sandbox do
     if connection.expired?
       service = Connections::Google::RefreshCredentialsService.new(connection:)
       service.call!
-      connection.reload
+      connection = connection.reload
     end
 
     service = Connections::Google::SendEmailService.new(
@@ -55,6 +55,26 @@ namespace :google_sandbox do
     service.call!
 
     puts service.result
+  end
+
+  desc 'Get details of an email by ID'
+  task email_details: :environment do
+    message_id = ENV.fetch('MESSAGE_ID')
+
+    connection = Connection.connected.find_by!(category: :email_sender, provider: :google)
+    if connection.expired?
+      service = Connections::Google::RefreshCredentialsService.new(connection:)
+      service.call!
+      connection = connection.reload
+    end
+
+    service = Connections::Google::EmailDetailsService.new(
+      connection:,
+      params: { message_id: }
+    )
+    service.call!
+
+    puts JSON.pretty_generate(service.result)
   end
 end
 # rubocop:enable Metrics/BlockLength:

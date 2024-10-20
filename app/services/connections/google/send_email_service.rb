@@ -6,6 +6,7 @@ module Connections
       require 'httparty'
 
       prepend Connections::Helpers::Authorization
+      prepend Connections::Helpers::EmailSenderCategory
 
       def call!
         validate!(provider: :google)
@@ -23,12 +24,6 @@ module Connections
       end
 
       private
-
-      def validate_connection!
-        return if connection.email_sender?
-
-        raise Connections::Exceptions::WrongCategoryError, "#{self.class.name} doesn't support #{connection.category}"
-      end
 
       def body
         { raw: params[:encoded_message] }.to_json

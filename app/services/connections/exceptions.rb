@@ -6,5 +6,6 @@ module Connections
     WrongCategoryError       = Class.new(StandardError)
     InvalidRefreshTokenError = Class.new(StandardError)
     AccessTokenExpiredError  = Class.new(StandardError)
+    MissingMessageIdError    = Class.new(StandardError)
   end
 end
