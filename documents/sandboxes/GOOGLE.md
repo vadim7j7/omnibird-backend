@@ -39,11 +39,10 @@ To send a reply:
 IN_REPLY_TO="previous_email_id" TO=recipient@example.com rails google_sandbox:send_email
 ```
 
-### 4. Get an email details from gmail
-```MESSAGE_ID``` id the ID of gmail response from API
+### 5. Retrieve email details from Gmail
+```MESSAGE_ID``` is the ID of the Gmail response from the API
 
-
-To get the details:
+To retrieve the email details, run the following command:
 ```shell
 MESSAGE_ID=message_id rails google_sandbox:email_details
 ```

@@ -38,3 +38,12 @@ To send a reply:
 ```shell
 IN_REPLY_TO="previous_email_id" TO=recipient@example.com rails microsoft_sandbox:send_email
 ```
+
+### 5. Retrieve email details from Microsoft
+```EMAIL_TO``` is the email address of the recipient.
+```SUBJECT``` is the subject of the email.
+
+To retrieve the email details, run the following command:
+```shell
+EMAIL_TO=some@mail.com SUBJECT="Testing" rails microsoft_sandbox:latest_email
+```

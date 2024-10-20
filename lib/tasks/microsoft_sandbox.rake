@@ -45,7 +45,7 @@ namespace :microsoft_sandbox do
     if connection.expired?
       service = Connections::Microsoft::RefreshCredentialsService.new(connection:)
       service.call!
-      connection.reload
+      connection = connection.reload
     end
 
     service = Connections::Microsoft::SendEmailService.new(
@@ -55,6 +55,24 @@ namespace :microsoft_sandbox do
     service.call!
 
     puts service.result
+  end
+
+  desc 'Get latest email details by subject and email to'
+  task latest_email: :environment do
+    email_to = ENV.fetch('EMAIL_TO')
+    subject  = ENV.fetch('SUBJECT')
+
+    connection = Connection.connected.find_by!(category: :email_sender, provider: :microsoft)
+    if connection.expired?
+      service = Connections::Microsoft::RefreshCredentialsService.new(connection:)
+      service.call!
+      connection = connection.reload
+    end
+
+    service = Connections::Microsoft::EmailDetailsService.new(connection:, params: { subject:, to: email_to })
+    service.call!
+
+    puts JSON.pretty_generate(service.result)
   end
 end
 # rubocop:enable Metrics/BlockLength:
