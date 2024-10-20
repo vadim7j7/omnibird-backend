@@ -25,6 +25,7 @@ RSpec.describe(Message::MailerService, type: :service) do
       end
 
       it 'sets the correct body type' do
+        expect(service.message.html_part.content_type).to eq('text/html; charset=UTF-8')
         expect(service.message.html_part.body.raw_source).to eq('This is a test email.')
       end
 

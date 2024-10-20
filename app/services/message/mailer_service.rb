@@ -78,6 +78,7 @@ module Message
       mail_part.body = params[:body]
 
       if body_type == :html
+        mail_part.content_type = 'text/html; charset=UTF-8'
         message.html_part = mail_part
       else
         message.text_part = mail_part

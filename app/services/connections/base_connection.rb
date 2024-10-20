@@ -36,7 +36,7 @@ module Connections
 
     # @param[Hash] data
     def oauth_params!(data:)
-      connection.metadata['oauth_params'] = data
+      connection.metadata['oauth_params'] = data.deep_stringify_keys
       connection.status                   = :pending
 
       if connection.metadata.dig('oauth_params', 'state').present?
