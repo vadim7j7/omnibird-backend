@@ -43,6 +43,11 @@ FactoryBot.define do
       category { :email_sender }
       provider { :microsoft }
 
+      metadata do
+        { 'oauth_params' => { 'redirect_uri' => Faker::Internet.url,
+                              'scope' => 'openid profile email offline_access User.Read Mail.Read Mail.Send' } }
+      end
+
       expired_at { Time.at(Faker::Omniauth.google[:credentials][:expires_at]) }
 
       credentials do
