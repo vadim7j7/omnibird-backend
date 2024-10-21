@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe(Connections::Microsoft::RepliesService, type: :service) do\
+RSpec.describe(Connections::Microsoft::RepliesService, type: :service) do
   let(:connection) { create(:microsoft_email_sender) }
   let(:params) { { thread_id: Faker::Internet.uuid } }
   let(:service) { described_class.new(connection:, params:) }

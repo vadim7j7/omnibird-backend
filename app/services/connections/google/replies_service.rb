@@ -1,24 +1,25 @@
 # frozen_string_literal: true
 
 module Connections
-  module Microsoft
-    class RepliesService < Connections::Microsoft::AuthBaseService
+  module Google
+    class RepliesService < Connections::Google::AuthBaseService
       require 'httparty'
 
       prepend Connections::Helpers::Authorization
       prepend Connections::Helpers::EmailSenderCategory
 
-      MESSAGES_URL = 'https://graph.microsoft.com/v1.0/me/messages'.freeze
+      MESSAGES_URL = 'https://gmail.googleapis.com/gmail/v1/users/me/threads/{threadId}'.freeze
 
       def call!
-        validate!(provider: :microsoft)
+        validate!(provider: :google)
         validate_connection!
         validate_params!
 
-        response = HTTParty.get(MESSAGES_URL, headers:, query:)
+        url = MESSAGES_URL.sub('{threadId}', params[:thread_id])
+        response = HTTParty.get(url, headers:)
         data = response.parsed_response.deep_symbolize_keys
         if response.success?
-          find_replies!(items: data[:value])
+          find_replies!(items: data[:messages])
         else
           @result = data
           @status = false
@@ -29,20 +30,13 @@ module Connections
 
       private
 
-      # @param[Array<Hash>] items
+      # @param[Array<Hash>]
       def find_replies!(items:)
         @result[:source_data] =
           items
-          .sort_by { |message| message[:sentDateTime] }
-          .reverse
-          .select { |item| item[:conversationId] == params[:thread_id] && item[:subject].start_with?('Re:') }
+          .select { |item| item[:payload][:headers].any? { |r| r[:name] == 'In-Reply-To' } }
 
         nil
-      end
-
-      # @return[Hash]
-      def query
-        { '$filter': "conversationId eq '#{params[:thread_id]}'" }
       end
 
       def validate_params!
