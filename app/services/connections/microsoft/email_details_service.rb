@@ -19,7 +19,7 @@ module Connections
         response = HTTParty.get(MESSAGES_URL, headers:, query:)
         data = response.parsed_response.deep_symbolize_keys
         if response.success?
-          find_email!(items: data[:value])
+          find_mail!(items: data[:value])
         else
           @status = false
           @result = data
@@ -29,7 +29,7 @@ module Connections
       private
 
       # @param[Array<Hash>]
-      def find_email!(items:)
+      def find_mail!(items:)
         filtered_messages = items.select do |message|
           message[:subject] == params[:subject] &&
             message[:toRecipients].any? { |recipient| recipient[:emailAddress][:address] == params[:to] }

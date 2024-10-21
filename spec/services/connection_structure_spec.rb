@@ -49,7 +49,7 @@ RSpec.describe('Service Module Structure') do
     it_behaves_like(
       'a service module with required files',
       'Email',
-      %w[send_email_service.rb email_details_service.rb]
+      %w[send_email_service.rb email_details_service.rb replies_service.rb]
     )
   end
 end

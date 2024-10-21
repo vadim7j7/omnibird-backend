@@ -6,6 +6,7 @@ module Connections
       require 'httparty'
 
       prepend Connections::Helpers::Authorization
+      prepend Connections::Helpers::EmailSenderCategory
 
       attr_reader :email_body_payload
 
@@ -19,9 +20,7 @@ module Connections
         build_email_body!
 
         response = HTTParty.post(send_url, body: email_body_payload.to_json, headers:)
-        if response.success?
-          @status = true
-        else
+        unless response.success?
           @result = response.parsed_response.deep_symbolize_keys
           @status = false
         end
@@ -37,12 +36,6 @@ module Connections
         else
           SEND_EMAIL_URL
         end
-      end
-
-      def validate_connection!
-        return if connection.email_sender?
-
-        raise Connections::Exceptions::WrongCategoryError, "#{self.class.name} doesn't support #{connection.category}"
       end
 
       # @return[Message::MailerService]
