@@ -6,7 +6,7 @@ source 'https://rubygems.org'
 gem 'bootsnap', require: false
 gem 'pg', '~> 1.1'
 gem 'puma', '>= 5.0'
-gem 'rails', '~> 7.2.0'
+gem 'rails', '~> 7.2.1'
 gem 'tzinfo-data', platforms: %i[windows jruby]
 gem 'sprockets-rails', require: 'sprockets/railtie'
 
