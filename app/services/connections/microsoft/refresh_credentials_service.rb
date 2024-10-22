@@ -14,6 +14,8 @@ module Connections
         response = HTTParty.post('https://login.microsoftonline.com/common/oauth2/v2.0/token', body:)
         save_response!(data: response.parsed_response, code: response.code)
         success_connected!(credentials: @credentials) if response.code == 200
+
+        nil
       end
 
       private
