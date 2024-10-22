@@ -26,7 +26,10 @@ module Connections
       private
 
       def body
-        { raw: params[:encoded_message] }.to_json
+        @body ||=
+          { raw: params[:encoded_message] }
+          .merge(params[:thread_id].present? ? { threadId: params[:thread_id] } : {})
+          .to_json
       end
     end
   end

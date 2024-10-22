@@ -29,6 +29,7 @@ namespace :google_sandbox do
     subject     = ENV.fetch('SUBJECT', 'Testing')
     attachment  = ENV['FILE_URL']
     in_reply_to = ENV['IN_REPLY_TO']
+    thread_id   = ENV['THREAD_ID']
 
     mailer_service = Message::MailerService.new(
       params: {
@@ -50,7 +51,7 @@ namespace :google_sandbox do
 
     service = Connections::Google::SendEmailService.new(
       connection:,
-      params: { encoded_message: mailer_service.as_string }
+      params: { thread_id:, encoded_message: mailer_service.as_string }
     )
     service.call!
 

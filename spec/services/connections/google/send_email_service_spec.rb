@@ -6,7 +6,7 @@ RSpec.describe(Connections::Google::SendEmailService, type: :service) do
   let(:send_messages_url) { 'https://gmail.googleapis.com/gmail/v1/users/me/messages/send' }
 
   let(:connection) { create(:google_email_sender) }
-  let(:params) { { encoded_message: Base64.encode64(Faker::HTML.paragraph) } }
+  let(:params) { { thread_id: Faker::Internet.uuid, encoded_message: Base64.encode64(Faker::HTML.paragraph) } }
   let(:service) { described_class.new(connection:, params:) }
   let(:authorization) { "#{connection.credentials_parsed[:token_type]} #{connection.credentials_parsed[:access_token]}" }
 
@@ -27,7 +27,7 @@ RSpec.describe(Connections::Google::SendEmailService, type: :service) do
 
         expect(HTTParty).to have_received(:post).with(
           send_messages_url,
-          body: { raw: params[:encoded_message] }.to_json,
+          body: { raw: params[:encoded_message], threadId: params[:thread_id] }.to_json,
           headers: { Authorization: authorization, 'Content-Type': 'application/json' }
         )
       end
@@ -77,7 +77,7 @@ RSpec.describe(Connections::Google::SendEmailService, type: :service) do
 
     describe '#body' do
       it 'generates the correct body for the request' do
-        expect(service.send(:body)).to eq({ raw: params[:encoded_message] }.to_json)
+        expect(service.send(:body)).to eq({ raw: params[:encoded_message], threadId: params[:thread_id] }.to_json)
       end
     end
   end
