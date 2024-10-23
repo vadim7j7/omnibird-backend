@@ -14,7 +14,7 @@ module Connections
         validate!(provider: :google)
         validate_connection!
 
-        raise Connections::Exceptions::MissingMessageIdError if params[:message_id].blank?
+        raise Connections::Exceptions::MissingMessageIdError, 'message_id is missing' if params[:message_id].blank?
 
         url = MESSAGE_URL.sub('{messageId}', params[:message_id])
         response = HTTParty.get(url, headers:)
