@@ -8,6 +8,8 @@ module MailGateway
 
     def call!
       call_handler { build_mailer_service! }
+
+      nil
     end
 
     # @return[Hash]

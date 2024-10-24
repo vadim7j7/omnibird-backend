@@ -20,7 +20,9 @@ module Connections
         build_email_body!
 
         response = HTTParty.post(send_url, body: email_body_payload.to_json, headers:)
-        unless response.success?
+        if response.success?
+          @result[:api_request] = { to: mailer_service.message.to, subject: mailer_service.message.subject }
+        else
           @result = response.parsed_response.deep_symbolize_keys
           @status = false
         end

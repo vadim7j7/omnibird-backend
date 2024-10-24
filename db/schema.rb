@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_10_13_054809) do
+ActiveRecord::Schema[7.2].define(version: 2024_10_24_053610) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -31,4 +31,21 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_13_054809) do
     t.index ["state_token"], name: "index_connections_on_state_token"
     t.index ["uuid", "category", "provider"], name: "index_connections_on_uuid_and_category_and_provider", unique: true
   end
+
+  create_table "message_sent_sessions", force: :cascade do |t|
+    t.bigint "connection_id", null: false
+    t.string "message_id"
+    t.string "thread_id"
+    t.string "mail_id"
+    t.integer "stage", default: 0, null: false
+    t.integer "status", default: 0, null: false
+    t.jsonb "data_source_response", default: {}
+    t.jsonb "data_source_message_details", default: {}
+    t.string "raw_message"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["connection_id"], name: "index_message_sent_sessions_on_connection_id"
+  end
+
+  add_foreign_key "message_sent_sessions", "connections"
 end

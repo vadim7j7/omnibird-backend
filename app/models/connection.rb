@@ -3,6 +3,8 @@
 class Connection < ApplicationRecord
   encrypts(:credentials)
 
+  has_many :message_sent_sessions, dependent: :destroy
+
   enum :category, %i[oauth email_sender]
   enum :provider, %i[google microsoft]
   enum :status, %i[pending connected failed]

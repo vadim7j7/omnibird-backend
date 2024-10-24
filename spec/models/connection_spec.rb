@@ -20,6 +20,14 @@ RSpec.describe(Connection, type: :model) do
     it { is_expected.to respond_to(:expired_at) }
   end
 
+  describe 'Associations' do
+    let!(:connection) { build(:connection) }
+
+    subject { connection }
+
+    it { should have_many(:message_sent_sessions).dependent(true) }
+  end
+
   describe 'Enums' do
     let!(:connection) { build(:connection) }
 
