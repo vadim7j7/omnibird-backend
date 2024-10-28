@@ -4,6 +4,8 @@ class Connection < ApplicationRecord
   encrypts(:credentials)
 
   has_many :message_sent_sessions, dependent: :destroy
+  has_many :sequence_settings, dependent: :destroy
+  has_many :contact_sequence_stages, dependent: :destroy
 
   enum :category, %i[oauth email_sender]
   enum :provider, %i[google microsoft]

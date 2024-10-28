@@ -1,9 +1,9 @@
-# This file should ensure the existence of records required to run the application in every environment (production,
-# development, test). The code here should be idempotent so that it can be executed at any point in every environment.
-# The data can then be loaded with the bin/rails db:seed command (or created alongside the database with db:setup).
-#
-# Example:
-#
-#   ["Action", "Comedy", "Drama", "Horror"].each do |genre_name|
-#     MovieGenre.find_or_create_by!(name: genre_name)
-#   end
+# Create System Action Rules:
+data = [
+  { name: 'Weekend', dates: [{ day_of_week: 6 }, { day_of_week: 7 }] }
+]
+
+data.each do |item|
+  record = ActionRule.find_or_create_by!(system_action: true, action_type: :skipping, name: item[:name])
+  item[:dates].each { |date| record.action_rule_dates.find_or_create_by!(**date) }
+end

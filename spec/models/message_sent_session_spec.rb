@@ -20,6 +20,7 @@ RSpec.describe(MessageSentSession, type: :model) do
 
   describe 'Associations' do
     it { should belong_to(:connection) }
+    it { should have_many(:contact_sequence_stages).dependent(true) }
   end
 
   describe 'Enums' do
