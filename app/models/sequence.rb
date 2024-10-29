@@ -5,4 +5,6 @@ class Sequence < ApplicationRecord
   has_one :sequence_setting, dependent: :destroy
 
   enum status: %i[pending started pasued]
+
+  validates :name, presence: true
 end

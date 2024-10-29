@@ -1,9 +1,10 @@
 class CreateSequenceSettings < ActiveRecord::Migration[7.2]
   def change
     create_table :sequence_settings do |t|
-      t.belongs_to :sequence, null: false, foreign_key: true
+      t.belongs_to :sequence, null: false, foreign_key: true, index: false
       t.belongs_to :connection, null: false, foreign_key: true
 
+      t.string :timezone, default: nil
       t.date :schedule_start_at, default: nil
       t.time :allowed_send_window_from, default: nil
       t.time :allowed_send_window_to, default: nil
@@ -25,9 +26,9 @@ class CreateSequenceSettings < ActiveRecord::Migration[7.2]
       t.string :cc_email, null: false, array: true, default: []
       t.string :bcc_email, null: false, array: true, default: []
 
-      t.string :timezone, default: nil
-
       t.timestamps
     end
+
+    add_index :sequence_settings, :sequence_id, unique: true
   end
 end
