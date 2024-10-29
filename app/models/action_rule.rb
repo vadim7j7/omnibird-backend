@@ -5,4 +5,6 @@ class ActionRule < ApplicationRecord
   has_many :action_rule_associations, dependent: :destroy
 
   enum :action_type, %i[sending skipping]
+
+  validates :name, :group_key, presence: true
 end

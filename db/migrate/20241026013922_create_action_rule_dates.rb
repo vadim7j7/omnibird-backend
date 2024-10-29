@@ -11,7 +11,7 @@ class CreateActionRuleDates < ActiveRecord::Migration[7.2]
 
       t.integer :week_day
       t.integer :week_ordinal
-      t.boolean :week_is_last_day
+      t.boolean :week_is_last_day, default: nil
 
       t.timestamps
     end
