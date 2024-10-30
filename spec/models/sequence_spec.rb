@@ -70,6 +70,22 @@ RSpec.describe(Sequence, type: :model) do
 
         expect { sequence.save }.to change { SequenceStage.count }.by(-1)
       end
+
+      it 'updates sequence_stages when sequence_stage_attributes are provided' do
+        sequence.save!
+
+        expect(sequence.sequence_stages).to be_present
+
+        first_stage = sequence.sequence_stages.first
+        new_subject = 'Updated Subject'
+
+        sequence.sequence_stages_attributes = [
+          { id: first_stage.id, subject: new_subject }
+        ]
+
+        sequence.save!
+        expect(first_stage.reload.subject).to eq(new_subject)
+      end
     end
   end
 
