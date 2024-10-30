@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe(Connection, type: :model) do
-  describe 'Attributes' do
+  describe 'attributes' do
     let!(:connection) { build(:connection) }
 
     subject { connection }
@@ -18,9 +18,11 @@ RSpec.describe(Connection, type: :model) do
     it { is_expected.to respond_to(:provider_errors) }
     it { is_expected.to respond_to(:state_token) }
     it { is_expected.to respond_to(:expired_at) }
+    it { is_expected.to respond_to(:created_at) }
+    it { is_expected.to respond_to(:updated_at) }
   end
 
-  describe 'Associations' do
+  describe 'associations' do
     let!(:connection) { build(:connection) }
 
     subject { connection }
@@ -30,7 +32,7 @@ RSpec.describe(Connection, type: :model) do
     it { should have_many(:contact_sequence_stages).dependent(true) }
   end
 
-  describe 'Enums' do
+  describe 'enums' do
     let!(:connection) { build(:connection) }
 
     subject { connection }
@@ -40,7 +42,7 @@ RSpec.describe(Connection, type: :model) do
     it { is_expected.to define_enum_for(:status).with_values(pending: 0, connected: 1, failed: 2)}
   end
 
-  describe 'Google oAuth' do
+  describe 'google oAuth' do
     let!(:connection) { create(:google_oauth) }
 
     subject { connection }
@@ -48,7 +50,7 @@ RSpec.describe(Connection, type: :model) do
     it { is_expected.to be_valid }
   end
 
-  describe 'Google Email Sender' do
+  describe 'google email sender' do
     let!(:connection) { create(:google_email_sender) }
 
     subject { connection }

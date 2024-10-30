@@ -7,7 +7,7 @@ RSpec.describe(ActionRuleDate, type: :model) do
 
   subject { action_rule }
 
-  describe 'Attributes' do
+  describe 'attributes' do
     it { is_expected.to respond_to(:name) }
     it { is_expected.to respond_to(:group_key) }
     it { is_expected.to respond_to(:day) }
@@ -16,9 +16,11 @@ RSpec.describe(ActionRuleDate, type: :model) do
     it { is_expected.to respond_to(:week_day) }
     it { is_expected.to respond_to(:week_ordinal) }
     it { is_expected.to respond_to(:week_is_last_day) }
+    it { is_expected.to respond_to(:created_at) }
+    it { is_expected.to respond_to(:updated_at) }
   end
 
-  describe 'Associations' do
+  describe 'associations' do
     it { should belong_to(:action_rule) }
   end
 
