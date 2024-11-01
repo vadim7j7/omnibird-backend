@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-GrapeSwaggerRails.options.url     = '/api/v1/swagger_doc'
+GrapeSwaggerRails.options.url     = '/swagger_doc'
 GrapeSwaggerRails.options.app_url = ENV.fetch('API_FULL_URI')
 
 GrapeSwaggerRails.options.api_auth     = Constants::JWT_TOKEN_SCHEME

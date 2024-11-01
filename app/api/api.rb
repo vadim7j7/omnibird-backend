@@ -3,12 +3,8 @@
 require 'grape-swagger'
 
 class Api < Grape::API
-  CURRENT_VERSION = 'v1'
-
   # Settings
   format 'json'
-  prefix :api
-  version CURRENT_VERSION
 
   # Include concerns
   # include Handler....
@@ -30,14 +26,7 @@ class Api < Grape::API
   end
 
   # Mounting endpoints
-  # mount(Endpoints::InitPage)
-  # ....
-
-  desc 'Root Api Endpoint'
-  get '/' do
-    { name: 'OmniBird Backend Api',
-      version: CURRENT_VERSION }
-  end
+  mount(Internal::V1::Api)
 
   # Init Swagger documentation
   add_swagger_documentation(
