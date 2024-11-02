@@ -10,9 +10,30 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_10_27_190716) do
+ActiveRecord::Schema[7.2].define(version: 2024_11_01_080423) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "account_users", force: :cascade do |t|
+    t.bigint "account_id", null: false
+    t.bigint "user_id", null: false
+    t.integer "role", default: 1, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["account_id"], name: "index_account_users_on_account_id"
+    t.index ["user_id"], name: "index_account_users_on_user_id"
+  end
+
+  create_table "accounts", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "slug", null: false
+    t.string "domain"
+    t.integer "type_of_account", default: 0
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["domain"], name: "index_accounts_on_domain_unique_with_nil", unique: true, where: "(domain IS NOT NULL)"
+    t.index ["slug"], name: "index_accounts_on_slug", unique: true
+  end
 
   create_table "action_rule_associations", force: :cascade do |t|
     t.bigint "action_rule_id", null: false
@@ -181,6 +202,17 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_27_190716) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "users", force: :cascade do |t|
+    t.string "email", null: false
+    t.string "first_name"
+    t.string "last_name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["email"], name: "index_users_on_email", unique: true
+  end
+
+  add_foreign_key "account_users", "accounts"
+  add_foreign_key "account_users", "users"
   add_foreign_key "action_rule_associations", "action_rules"
   add_foreign_key "action_rule_dates", "action_rules"
   add_foreign_key "contact_sequence_activities", "contact_sequences"
