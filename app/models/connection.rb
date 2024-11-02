@@ -3,6 +3,9 @@
 class Connection < ApplicationRecord
   encrypts(:credentials)
 
+  belongs_to :account
+  belongs_to :user
+
   has_many :message_sent_sessions, dependent: :destroy
   has_many :sequence_settings, dependent: :destroy
   has_many :contact_sequence_stages, dependent: :destroy

@@ -9,11 +9,18 @@ class Account < ApplicationRecord
            primary_key: :id,
            foreign_key: :account_id
 
+  has_many :action_rules, dependent: :destroy
+  has_many :connections, dependent: :destroy
+  has_many :contacts, dependent: :destroy
+  has_many :sequences, dependent: :destroy
+
   validates :name, :slug, presence: true
   validates :slug, uniqueness: true
 
   validates :domain, presence: true, if: -> { company? }
   validates :domain, uniqueness: true, if: -> { company? }
+
+  validates :account_users, length: { maximum: 1 }, if: -> { individual? }
 
   enum :type_of_account, %i[individual company]
 end

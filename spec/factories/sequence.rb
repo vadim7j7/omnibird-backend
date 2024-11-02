@@ -4,6 +4,9 @@ require 'faker'
 
 FactoryBot.define do
   factory :sequence do
+    association :account
+    association :user
+
     name { Faker::Name.name }
     status { :pending }
     sequence_setting { build(:sequence_setting) }

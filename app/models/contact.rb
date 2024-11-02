@@ -3,6 +3,9 @@
 class Contact < ApplicationRecord
   before_validation :set_email_domain!, if: -> { email.present? }
 
+  belongs_to :account
+  belongs_to :user
+
   has_many :contact_sequences, dependent: :destroy
 
   validates :email, presence: true

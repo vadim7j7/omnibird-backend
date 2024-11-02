@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_11_01_080423) do
+ActiveRecord::Schema[7.2].define(version: 2024_10_27_190716) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -61,16 +61,22 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_01_080423) do
   end
 
   create_table "action_rules", force: :cascade do |t|
+    t.bigint "account_id"
+    t.bigint "user_id"
     t.string "name", null: false
     t.string "group_key", null: false
     t.integer "action_type", null: false
     t.boolean "system_action", default: false, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["account_id"], name: "index_action_rules_on_account_id"
     t.index ["group_key"], name: "index_action_rules_on_group_key"
+    t.index ["user_id"], name: "index_action_rules_on_user_id"
   end
 
   create_table "connections", force: :cascade do |t|
+    t.bigint "account_id", null: false
+    t.bigint "user_id", null: false
     t.string "uuid"
     t.integer "category", null: false
     t.integer "provider", null: false
@@ -83,8 +89,10 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_01_080423) do
     t.datetime "expired_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["account_id"], name: "index_connections_on_account_id"
     t.index ["expired_at"], name: "index_connections_on_expired_at"
     t.index ["state_token"], name: "index_connections_on_state_token"
+    t.index ["user_id"], name: "index_connections_on_user_id"
     t.index ["uuid", "category", "provider"], name: "index_connections_on_uuid_and_category_and_provider", unique: true
   end
 
@@ -124,14 +132,18 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_01_080423) do
   end
 
   create_table "contacts", force: :cascade do |t|
+    t.bigint "account_id", null: false
+    t.bigint "user_id", null: false
     t.string "email", null: false
     t.string "first_name"
     t.string "last_name"
     t.string "email_domain"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["account_id"], name: "index_contacts_on_account_id"
     t.index ["email"], name: "index_contacts_on_email", unique: true
     t.index ["email_domain"], name: "index_contacts_on_email_domain"
+    t.index ["user_id"], name: "index_contacts_on_user_id"
   end
 
   create_table "message_sent_sessions", force: :cascade do |t|
@@ -196,10 +208,14 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_01_080423) do
   end
 
   create_table "sequences", force: :cascade do |t|
+    t.bigint "account_id", null: false
+    t.bigint "user_id", null: false
     t.string "name"
     t.integer "status", default: 0, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["account_id"], name: "index_sequences_on_account_id"
+    t.index ["user_id"], name: "index_sequences_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -215,6 +231,10 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_01_080423) do
   add_foreign_key "account_users", "users"
   add_foreign_key "action_rule_associations", "action_rules"
   add_foreign_key "action_rule_dates", "action_rules"
+  add_foreign_key "action_rules", "accounts"
+  add_foreign_key "action_rules", "users"
+  add_foreign_key "connections", "accounts"
+  add_foreign_key "connections", "users"
   add_foreign_key "contact_sequence_activities", "contact_sequences"
   add_foreign_key "contact_sequence_stages", "connections"
   add_foreign_key "contact_sequence_stages", "contact_sequences"
@@ -222,8 +242,12 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_01_080423) do
   add_foreign_key "contact_sequence_stages", "sequence_stages"
   add_foreign_key "contact_sequences", "contacts"
   add_foreign_key "contact_sequences", "sequences"
+  add_foreign_key "contacts", "accounts"
+  add_foreign_key "contacts", "users"
   add_foreign_key "message_sent_sessions", "connections"
   add_foreign_key "sequence_settings", "connections"
   add_foreign_key "sequence_settings", "sequences"
   add_foreign_key "sequence_stages", "sequences"
+  add_foreign_key "sequences", "accounts"
+  add_foreign_key "sequences", "users"
 end

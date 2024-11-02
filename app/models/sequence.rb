@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 
 class Sequence < ApplicationRecord
+  belongs_to :account
+  belongs_to :user
+
   has_one :sequence_setting, dependent: :destroy
   has_many :sequence_stages, dependent: :destroy
 

@@ -4,6 +4,9 @@ require 'faker'
 
 FactoryBot.define do
   factory :connection do
+    association :account
+    association :user
+
     uuid { Faker::Internet.uuid }
     status { :connected }
 
