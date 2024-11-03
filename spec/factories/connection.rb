@@ -61,5 +61,20 @@ FactoryBot.define do
           refresh_token: data[:credentials][:refresh_token] }.to_json
       end
     end
+
+    factory :smtp_email_sender do
+      category { :email_sender }
+      provider { :smtp }
+      
+      credentials do
+        { address: 'smtp.gmail.com',
+          port: 587,
+          domain: Faker::Internet.domain_name,
+          username: Faker::Internet.email,
+          password: Faker::Internet.password,
+          authentication: :plain,
+          enable_starttls_auto: true }.to_json
+      end
+    end
   end
 end

@@ -11,7 +11,7 @@ class Connection < ApplicationRecord
   has_many :contact_sequence_stages, dependent: :destroy
 
   enum :category, %i[oauth email_sender]
-  enum :provider, %i[google microsoft]
+  enum :provider, %i[google microsoft smtp]
   enum :status, %i[pending connected failed]
 
   validates :category, :provider, presence: true

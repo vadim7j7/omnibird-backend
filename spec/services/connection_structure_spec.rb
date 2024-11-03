@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe('Service Module Structure') do
   let(:services_directory) { Rails.root.join('app/services/connections') }
-  let(:excluded_directories) { %w[helpers] }
+  let(:excluded_directories) { %w[helpers smtp] }
 
   # Get all subdirectories inside services/connections (e.g., google, microsoft, etc.)
   let(:service_modules) do

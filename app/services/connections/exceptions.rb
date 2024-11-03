@@ -7,5 +7,6 @@ module Connections
     InvalidRefreshTokenError = Class.new(StandardError)
     AccessTokenExpiredError  = Class.new(StandardError)
     MissingMessageIdError    = Class.new(StandardError)
+    MissingParamError        = Class.new(StandardError)
   end
 end
