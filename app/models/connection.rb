@@ -28,6 +28,11 @@ class Connection < ApplicationRecord
   end
 
   # @return[Boolean]
+  def token_able?
+    email_sender? && google? && microsoft?
+  end
+
+  # @return[Boolean]
   def reconnect_able?
     credentials_parsed[:refresh_token].present?
   end

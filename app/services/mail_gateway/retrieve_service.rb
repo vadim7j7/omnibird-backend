@@ -31,6 +31,11 @@ module MailGateway
       }
     end
 
+    # @return[Hash]
+    def smtp_params
+      {}
+    end
+
     def perform!
       service = klass.new(connection:, params: provider_params)
       service.call!

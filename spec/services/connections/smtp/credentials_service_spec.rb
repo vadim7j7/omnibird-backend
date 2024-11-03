@@ -55,15 +55,14 @@ RSpec.describe(Connections::Smtp::CredentialsService, type: :service) do
         expect { subject.call! }.to(
           raise_error(
             Connections::Exceptions::MissingParamError,
-            /Missing required parameters: port, username, password, authentication/
+            /Missing required parameters: port, username, password/
           )
         )
 
         expect(subject.connection.provider_errors).to(
           eq('port' => 'port is required',
              'username' => 'username is required',
-             'password' => 'password is required',
-             'authentication' => 'authentication is required')
+             'password' => 'password is required')
         )
       end
     end

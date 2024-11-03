@@ -31,7 +31,7 @@ module Connections
                                        mailer_service.message.from.first,
                                        mailer_service.message.to)
         end
-        @result = { message: 'Email sent successfully' }
+        success!
       rescue Net::SMTPAuthenticationError => e
         @status = false
         @result = { error: 'SMTP authentication failed', details: e.message }
@@ -48,6 +48,18 @@ module Connections
         @smtp.enable_starttls_auto if smtp_settings[:enable_starttls_auto]
 
         @smtp
+      end
+
+      def success!
+        @result = {
+          api_message: {
+            id: mailer_service.message.message_id
+          },
+          api_request: {
+            subject: mailer_service.message.subject,
+            to: mailer_service.message.to
+          }
+        }
       end
 
       # @return[Message::MailerService]

@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe(MailGateway::RetrieveService, type: :service) do
-  let(:connection) { instance_double('Connection', provider: provider.to_s, email_sender?: true) }
+  let(:connection) { instance_double('Connection', provider: provider.to_s, email_sender?: true, token_able?: true) }
   let(:params) do
     { message_id: Faker::Internet.uuid,
       subject: 'Test Subject',
@@ -19,7 +19,7 @@ RSpec.describe(MailGateway::RetrieveService, type: :service) do
   describe '#call' do
     context 'when provider is Google' do
       let(:provider) { :google }
-      let(:google_service) { instance_double('Connections::Google::EmailDetailsService', call: nil, call!: nil, status: true, result: { source_data: 'google-email-details' }) }
+      let(:google_service) { instance_double('Connections::Google::EmailDetailsService', call!: nil, status: true, result: { source_data: 'google-email-details' }) }
 
       before do
         allow(Connections::Google::EmailDetailsService).to receive(:new).and_return(google_service)
@@ -37,7 +37,7 @@ RSpec.describe(MailGateway::RetrieveService, type: :service) do
 
     context 'when provider is Microsoft' do
       let(:provider) { :microsoft }
-      let(:microsoft_service) { instance_double('Connections::Microsoft::EmailDetailsService', call!: true, status: true, result: { source_data: 'microsoft-email-details' }) }
+      let(:microsoft_service) { instance_double('Connections::Microsoft::EmailDetailsService', call!: nil, status: true, result: { source_data: 'microsoft-email-details' }) }
 
       before do
         allow(Connections::Microsoft::EmailDetailsService).to receive(:new).and_return(microsoft_service)

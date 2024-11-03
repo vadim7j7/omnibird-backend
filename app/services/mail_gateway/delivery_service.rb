@@ -16,7 +16,8 @@ module MailGateway
     def providers
       @providers ||= {
         google: Connections::Google::SendEmailService,
-        microsoft: Connections::Microsoft::SendEmailService
+        microsoft: Connections::Microsoft::SendEmailService,
+        smtp: Connections::Smtp::SendEmailService
       }
     end
 
@@ -28,6 +29,11 @@ module MailGateway
 
     # @return[Hash]
     def microsoft_params
+      { mailer_service: }
+    end
+
+    # @return[Hash]
+    def smtp_params
       { mailer_service: }
     end
 

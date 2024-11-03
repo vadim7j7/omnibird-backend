@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe(MailGateway::DeliveryService, type: :service) do
-  let(:connection) { instance_double('Connection', provider: provider.to_s, email_sender?: true) }
+  let(:connection) { instance_double('Connection', provider: provider.to_s, email_sender?: true, token_able?: true) }
   let(:params) do
     { thread_id: Faker::Internet.uuid,
       mail_message_params: { subject: 'Test Subject',

@@ -29,7 +29,8 @@ module MailGateway
     rescue Connections::Exceptions::WrongCategoryError,
       Connections::Exceptions::WrongProviderError,
       Connections::Exceptions::InvalidRefreshTokenError,
-      Connections::Exceptions::MissingMessageIdError => err
+      Connections::Exceptions::MissingMessageIdError,
+      Connections::Exceptions::MissingParamError => err
 
       @status = false
       @result = { errors: { messages: [ err.message ] } }
@@ -54,7 +55,8 @@ module MailGateway
     def provider_params
       @provider_params ||=
         { google: google_params,
-          microsoft: microsoft_params }[provider]
+          microsoft: microsoft_params,
+          smtp: smtp_params }[provider]
     end
 
     def validate_provider!
@@ -68,6 +70,7 @@ module MailGateway
     end
 
     def validate_and_refresh_token!
+      return unless connection.token_able?
       return if Utils::Token.instance.check_and_refresh_token?(connection:)
 
       raise Connections::Exceptions::InvalidRefreshTokenError, 'access token is invalid'
@@ -85,6 +88,11 @@ module MailGateway
 
     # @return[Hash]
     def microsoft_params
+      raise NotImplementedError
+    end
+
+    # @return[Hash]
+    def smtp_params
       raise NotImplementedError
     end
 
