@@ -7,7 +7,7 @@ module Connections
 
       prepend Connections::Helpers::EmailSenderCategory
 
-      REQUIRED_PARAMS = %i[address port username password authentication].freeze
+      REQUIRED_PARAMS = %i[address port username password].freeze
 
       def call!
         validate!(provider: :smtp)
@@ -62,6 +62,7 @@ module Connections
           enable_starttls_auto:
         }
 
+        connection.uuid        = SecureRandom.uuid if connection.uuid.blank?
         connection.credentials = credentials.to_json
         connection.status      = :connected
         connection.save!
