@@ -79,8 +79,9 @@ RSpec.describe(SequenceStage, type: :model) do
 
       context 'when allowed_send_window_from is after allowed_send_window_to' do
         it 'is invalid and adds an error to allowed_send_window_to' do
-          sequence_stage.allowed_send_window_from = 2.hours.from_now
-          sequence_stage.allowed_send_window_to = 1.hour.from_now
+          tmp = sequence_stage.allowed_send_window_from
+          sequence_stage.allowed_send_window_from = sequence_stage.allowed_send_window_to
+          sequence_stage.allowed_send_window_to = tmp
           expect(sequence_stage).to be_invalid
           expect(sequence_stage.errors[:allowed_send_window_to]).to include('must be after allowed send window from')
         end

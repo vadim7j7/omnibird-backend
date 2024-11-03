@@ -77,8 +77,9 @@ RSpec.describe(SequenceSetting, type: :model) do
     describe 'TimeWindowValidator' do
       context 'when allowed_send_window_from is after allowed_send_window_to' do
         it 'is invalid and adds an error to allowed_send_window_to' do
-          sequence_setting.allowed_send_window_from = 2.hours.from_now
-          sequence_setting.allowed_send_window_to = 1.hour.from_now
+          tmp = sequence_setting.allowed_send_window_from
+          sequence_setting.allowed_send_window_from = sequence_setting.allowed_send_window_to
+          sequence_setting.allowed_send_window_to = tmp
           expect(sequence_setting).to be_invalid
           expect(sequence_setting.errors[:allowed_send_window_to]).to include('must be after allowed send window from')
         end
