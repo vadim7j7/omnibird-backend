@@ -16,9 +16,9 @@ module Message
     def call
       message.from        = params[:from]
       message.to          = params[:to]
-      message.reply_to    = params[:reply_to] if params[:reply_to].present?
-      message.bcc         = params[:bcc] if params[:bcc].present?
-      message.cc          = params[:cc] if params[:cc].present?
+      message.reply_to    = params[:reply_to]    if params[:reply_to].present?
+      message.bcc         = params[:bcc]         if params[:bcc].present?
+      message.cc          = params[:cc]          if params[:cc].present?
       message.in_reply_to = params[:in_reply_to] if params[:in_reply_to].present?
       message.references  = references
       message.subject     = subject

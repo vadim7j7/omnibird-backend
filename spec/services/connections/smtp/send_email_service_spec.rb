@@ -21,6 +21,7 @@ RSpec.describe(Connections::Smtp::SendEmailService, type: :service) do
     allow(mail_message).to receive(:to).and_return([recipient_email])
     allow(mail_message).to receive(:message_id).and_return(Faker::Internet.uuid)
     allow(mail_message).to receive(:subject).and_return(Faker::Hacker.abbreviation)
+    allow(mail_message).to receive(:references).and_return(nil)
 
     allow(Net::SMTP).to receive(:new).and_return(smtp_double)
     allow(smtp_double).to receive(:enable_starttls_auto)
@@ -38,10 +39,12 @@ RSpec.describe(Connections::Smtp::SendEmailService, type: :service) do
 
         expect(smtp_double).to have_received(:send_message).with('raw email content', sender_email, [recipient_email])
         expect(service.status).to be true
-        # expect(service.result).to(
-        #   eq({ api_message: { id: mailer_service.message.message_id } ,
-        #        api_request: { subject: mailer_service.message.subject, to: mailer_service.message.to }  })
-        # )
+
+        expect(service.result).to(
+          eq({ api_message: { id: mailer_service.message.message_id } ,
+               api_request: { subject: mailer_service.message.subject, to: mailer_service.message.to },
+               thread: { id: mailer_service.message.message_id, references: [] } })
+        )
       end
 
       it 'enables STARTTLS if specified in settings' do

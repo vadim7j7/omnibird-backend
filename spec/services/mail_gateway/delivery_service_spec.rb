@@ -56,6 +56,57 @@ RSpec.describe(MailGateway::DeliveryService, type: :service) do
       end
     end
 
+    context 'when provider is SMTP' do
+      let(:provider) { :smtp }
+      let(:smtp_service) { instance_double('Connections::Smtp::SendEmailService', call!: nil, call: nil, status: true, result: 'success') }
+
+      before do
+        allow(Connections::Smtp::SendEmailService).to receive(:new).and_return(smtp_service)
+      end
+
+      it 'builds the mailer service and sends the email' do
+        service_instance.call
+
+        expect(Message::MailerService).to have_received(:new).with(params: params[:mail_message_params])
+        expect(Connections::Smtp::SendEmailService).to(
+          have_received(:new)
+            .with(connection:, params: { mailer_service: mailer_service })
+        )
+        expect(smtp_service).to have_received(:call!)
+        expect(service_instance.status).to be_truthy
+        expect(service_instance.result).to eq 'success'
+      end
+
+      context 'when mailer service fails' do
+        before do
+          allow(mailer_service).to receive(:status).and_return(false)
+          allow(mailer_service).to receive(:result).and_return({ error: 'Invalid email format' })
+        end
+
+        it 'returns the mailer service error' do
+          service_instance.call
+
+          expect(Connections::Smtp::SendEmailService).not_to have_received(:new)
+          expect(service_instance.status).to be_falsey
+          expect(service_instance.result).to eq({ error: 'Invalid email format' })
+        end
+      end
+
+      context 'when smtp service fails' do
+        before do
+          allow(smtp_service).to receive(:status).and_return(false)
+          allow(smtp_service).to receive(:result).and_return({ error: 'SMTP authentication failed' })
+        end
+
+        it 'returns the smtp service error' do
+          service_instance.call
+
+          expect(service_instance.status).to be_falsey
+          expect(service_instance.result).to eq({ error: 'SMTP authentication failed' })
+        end
+      end
+    end
+
     context 'when mailer service fails' do
       let(:provider) { :google }
 

@@ -51,13 +51,19 @@ module Connections
       end
 
       def success!
+        message = mailer_service.message
+
         @result = {
           api_message: {
-            id: mailer_service.message.message_id
+            id: message.message_id
           },
           api_request: {
-            subject: mailer_service.message.subject,
-            to: mailer_service.message.to
+            subject: message.subject,
+            to: message.to
+          },
+          thread: {
+            id: message.references&.first || message.message_id,
+            references: message.references || []
           }
         }
       end

@@ -37,7 +37,7 @@ module Handlers
       service.call
       @status = service.status
 
-      message_sent_session.raw_message = service.mailer_service.as_string
+      message_sent_session.raw_message          = service.mailer_service.as_string
       message_sent_session.data_source_response = service.result
       message_sent_session.sent!
 
@@ -49,8 +49,9 @@ module Handlers
     def process_stage_retrieve!
       service = MailGateway::RetrieveService.new(connection:, params: {
         message_id: message_sent_session.data_source_response&.dig('api_message', 'id'),
-        subject: message_sent_session.data_source_response&.dig('api_request', 'subject'),
-        email: message_sent_session.data_source_response&.dig('api_request', 'to', 0)
+        subject:    message_sent_session.data_source_response&.dig('api_request', 'subject'),
+        email:      message_sent_session.data_source_response&.dig('api_request', 'to', 0),
+        thread:     message_sent_session.data_source_response&.dig('thread')
       })
       service.call
       @status = service.status
@@ -90,6 +91,10 @@ module Handlers
           message_sent_session
             .data_source_message_details
             .dig('source_data', 'conversationId')
+        elsif connection.smtp?
+          message_sent_session
+            .data_source_message_details
+            .dig('source_data', 'thread_id')
         end
     end
 
@@ -106,6 +111,10 @@ module Handlers
           message_sent_session
             .data_source_message_details
             .dig('source_data', 'internetMessageId')
+        elsif connection.smtp?
+          message_sent_session
+            .data_source_message_details
+            .dig('source_data', 'message_id')
         end
     end
   end
