@@ -15,16 +15,16 @@ module MailGateway
     # @return[Hash]
     def providers
       @providers ||= {
-        google: Connections::Google::SendEmailService,
+        google:    Connections::Google::SendEmailService,
         microsoft: Connections::Microsoft::SendEmailService,
-        smtp: Connections::Smtp::SendEmailService
+        smtp:      Connections::Smtp::SendEmailService
       }
     end
 
     # @return[Hash]
     def google_params
       { encoded_message: mailer_service.as_string,
-        thread_id: params[:thread_id] }
+        thread_id:       params[:thread_id] }
     end
 
     # @return[Hash]
