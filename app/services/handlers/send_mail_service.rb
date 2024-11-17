@@ -51,7 +51,7 @@ module Handlers
         message_id: message_sent_session.data_source_response&.dig('api_message', 'id'),
         subject:    message_sent_session.data_source_response&.dig('api_request', 'subject'),
         email:      message_sent_session.data_source_response&.dig('api_request', 'to', 0),
-        thread:     message_sent_session.data_source_response&.dig('thread')
+        thread:     message_sent_session.data_source_response&.dig('thread')&.deep_symbolize_keys
       })
       service.call
       @status = service.status
