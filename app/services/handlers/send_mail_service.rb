@@ -6,15 +6,18 @@ module Handlers
 
     # @param[Connection] connection
     # @param[Hash] params
-    def initialize(connection:, params: {})
+    # @param[Hash] options
+    def initialize(connection:, params: {}, options: {})
       super(params:)
 
       @connection = connection
+      @options    = options
     end
 
     def call!
       message_sent_session.pending!
 
+      inject_tracking!
       process_stage_send!
       process_stage_retrieve! if status
       save_result!
@@ -116,6 +119,40 @@ module Handlers
             .data_source_message_details
             .dig('source_data', 'message_id')
         end
+    end
+
+    def inject_tracking!
+      inject_open_message! if @options[:track_open_message]
+      inject_click_link!   if @options[:track_click_link]
+
+      nil
+    end
+
+    def inject_open_message!
+      service = Tracking::OpenEmailUrlService.new(params: tracking_params)
+      service.call
+      return if service.result[:updated_body].blank?
+
+      params[:mail_message_params][:body] = service.result[:updated_body]
+
+      nil
+    end
+
+    def inject_click_link!
+      service = Tracking::ClickEmailLinkService.new(params: tracking_params)
+      service.call
+      return if service.result[:updated_body].blank?
+
+      params[:mail_message_params][:body] = service.result[:updated_body]
+
+      nil
+    end
+
+    # @param[Hash]
+    def tracking_params
+      @tracking_params ||=
+        { message_sent_session:,
+          body: params[:mail_message_params][:body] }
     end
   end
 end

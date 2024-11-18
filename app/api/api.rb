@@ -27,6 +27,7 @@ class Api < Grape::API
 
   # Mounting endpoints
   mount(Internal::V1::Api)
+  mount(Public::V1::Api)
 
   # Init Swagger documentation
   add_swagger_documentation(

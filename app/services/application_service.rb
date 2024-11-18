@@ -3,6 +3,7 @@
 class ApplicationService
   attr_reader :result, :status, :params
 
+  # @param[Hash] params
   def initialize(params: {})
     @params = params
 
