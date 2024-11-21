@@ -4,7 +4,13 @@ module Internal
   module V1
     module Endpoints
       class Sequences < Grape::API
+        helpers ::Helpers::SharedParams::Main
+        helpers ::Helpers::SharedParams::SequenceHelper
+
         namespace :sequences do
+          params do
+            use(:pagination)
+          end
           desc 'Get list of sequences' do
             summary('List of sequences')
             success(Entities::Sequences::ItemsEntity)
@@ -17,6 +23,7 @@ module Internal
             success(Entities::Sequences::ItemPreviewEntity)
             failure(Entities::Constants::FAILURE_CREATE_UPDATE)
           end
+          params { use(:sequence_create_params) }
           post '/' do; end
 
           route_param :id do

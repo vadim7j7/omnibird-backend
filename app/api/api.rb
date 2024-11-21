@@ -13,7 +13,7 @@ class Api < Grape::API
   # use Middlewares::...
 
   # Importing helpers and some modules
-  # ...
+  helpers ::Helpers::ParamsHelpers
 
   # Init some helpers
   helpers do
