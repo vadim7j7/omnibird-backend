@@ -8,7 +8,7 @@ module Helpers
       params(:sequence_setting_params) do
         optional(:id, type: Integer, desc: 'ID of the sequence settings to update record')
 
-        optional(:timezone, type: String, desc: 'Timezone fot the sequence')
+        optional(:timezone, type: String, default: Time.zone.tzinfo.name, desc: 'Timezone fot the sequence')
         optional(:schedule_start_at, type: DateTime, desc: 'When to start the sequence')
         optional(:allowed_send_window_from, type: Time, desc: 'Time range when to allow to send the sequence FROM')
         optional(:allowed_send_window_to, type: Time, desc: 'Time range when to allow to send the sequence TO')
@@ -83,7 +83,7 @@ module Helpers
 
         optional(:allowed_send_window_from, type: Time, desc: 'Time range when to allow to send the sequence FROM')
         optional(:allowed_send_window_to, type: Time, desc: 'Time range when to allow to send the sequence TO')
-        optional(:timezone, type: String, desc: 'Timezone fot the state')
+        optional(:timezone, type: String, default: Time.zone.tzinfo.name, desc: 'Timezone fot the state')
 
         optional(:send_in_thread, type: Boolean, default: true, desc: 'Send in the same thread of the first email')
       end
