@@ -96,23 +96,21 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_17_223630) do
     t.index ["uuid", "category", "provider"], name: "index_connections_on_uuid_and_category_and_provider", unique: true
   end
 
-  create_table "contact_sequence_activities", force: :cascade do |t|
-    t.bigint "contact_sequence_id", null: false
+  create_table "contact_sequence_stage_activities", force: :cascade do |t|
+    t.bigint "contact_sequence_stage_id", null: false
     t.integer "event_type", null: false
     t.jsonb "event_metadata", default: {}, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["contact_sequence_id"], name: "index_contact_sequence_activities_on_contact_sequence_id"
+    t.index ["contact_sequence_stage_id"], name: "idx_on_contact_sequence_stage_id_3bc2586e1e"
   end
 
   create_table "contact_sequence_stages", force: :cascade do |t|
-    t.bigint "connection_id", null: false
     t.bigint "contact_sequence_id", null: false
     t.bigint "sequence_stage_id", null: false
     t.bigint "message_sent_session_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["connection_id"], name: "index_contact_sequence_stages_on_connection_id"
     t.index ["contact_sequence_id"], name: "index_contact_sequence_stages_on_contact_sequence_id"
     t.index ["message_sent_session_id"], name: "index_contact_sequence_stages_on_message_sent_session_id"
     t.index ["sequence_stage_id"], name: "index_contact_sequence_stages_on_sequence_stage_id"
@@ -121,12 +119,14 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_17_223630) do
   create_table "contact_sequences", force: :cascade do |t|
     t.bigint "contact_id", null: false
     t.bigint "sequence_id", null: false
+    t.bigint "connection_id", null: false
     t.integer "status", default: 0, null: false
     t.jsonb "variables", default: {}
     t.datetime "scheduled_at"
     t.datetime "archived_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["connection_id"], name: "index_contact_sequences_on_connection_id"
     t.index ["contact_id"], name: "index_contact_sequences_on_contact_id"
     t.index ["sequence_id"], name: "index_contact_sequences_on_sequence_id"
   end
@@ -246,11 +246,11 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_17_223630) do
   add_foreign_key "action_rules", "users"
   add_foreign_key "connections", "accounts"
   add_foreign_key "connections", "users"
-  add_foreign_key "contact_sequence_activities", "contact_sequences"
-  add_foreign_key "contact_sequence_stages", "connections"
+  add_foreign_key "contact_sequence_stage_activities", "contact_sequence_stages"
   add_foreign_key "contact_sequence_stages", "contact_sequences"
   add_foreign_key "contact_sequence_stages", "message_sent_sessions"
   add_foreign_key "contact_sequence_stages", "sequence_stages"
+  add_foreign_key "contact_sequences", "connections"
   add_foreign_key "contact_sequences", "contacts"
   add_foreign_key "contact_sequences", "sequences"
   add_foreign_key "contacts", "accounts"

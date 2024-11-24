@@ -13,9 +13,14 @@ RSpec.describe(ContactSequenceStage, type: :model) do
   end
 
   describe 'associations' do
-    it { should belong_to(:connection) }
     it { should belong_to(:contact_sequence) }
     it { should belong_to(:sequence_stage) }
     it { should belong_to(:message_sent_session) }
+    it { should have_many(:contact_sequence_stage_activities).dependent(true) }
+  end
+
+  describe 'delegates' do
+    it { is_expected.to respond_to(:stage) }
+    it { is_expected.to respond_to(:status) }
   end
 end

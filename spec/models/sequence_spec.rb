@@ -90,8 +90,9 @@ RSpec.describe(Sequence, type: :model) do
   end
 
   describe 'associations' do
-    it { should have_many(:sequence_stages).dependent(true) }
     it { should have_one(:sequence_setting).dependent(true) }
+    it { should have_many(:sequence_stages).dependent(true) }
+    it { should have_many(:contact_sequences).dependent(true) }
   end
 
   describe 'enums' do

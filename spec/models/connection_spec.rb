@@ -29,7 +29,7 @@ RSpec.describe(Connection, type: :model) do
 
     it { should have_many(:message_sent_sessions).dependent(true) }
     it { should have_many(:sequence_settings).dependent(true) }
-    it { should have_many(:contact_sequence_stages).dependent(true) }
+    it { should have_many(:contact_sequences).dependent(true) }
   end
 
   describe 'enums' do

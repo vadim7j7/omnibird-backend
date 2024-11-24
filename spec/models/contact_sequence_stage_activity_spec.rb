@@ -2,10 +2,10 @@
 
 require 'rails_helper'
 
-RSpec.describe(ContactSequenceActivity, type: :model) do
-  let(:contact_sequence_activity) { build(:contact_sequence_activity) }
+RSpec.describe(ContactSequenceStageActivity, type: :model) do
+  let(:contact_sequence_stage_activity) { build(:contact_sequence_stage_activity) }
 
-  subject { contact_sequence_activity }
+  subject { contact_sequence_stage_activity }
 
   describe 'attributes' do
     it { is_expected.to respond_to(:event_type) }
@@ -15,7 +15,7 @@ RSpec.describe(ContactSequenceActivity, type: :model) do
   end
 
   describe 'associations' do
-    it { should belong_to(:contact_sequence) }
+    it { should belong_to(:contact_sequence_stage) }
   end
 
   describe 'enums' do

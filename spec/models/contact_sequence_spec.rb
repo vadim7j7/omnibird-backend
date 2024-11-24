@@ -19,8 +19,8 @@ RSpec.describe(ContactSequence, type: :model) do
   describe 'associations' do
     it { should belong_to(:contact) }
     it { should belong_to(:sequence) }
+    it { should belong_to(:connection) }
     it { should have_many(:contact_sequence_stages).dependent(true) }
-    it { should have_many(:contact_sequence_activities).dependent(true) }
   end
 
   describe 'enums' do

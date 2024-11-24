@@ -6,6 +6,7 @@ FactoryBot.define do
   factory :contact_sequence do
     association :contact
     association :sequence
+    association :connection
 
     variables do
       { first_name: Faker::Name.first_name,
