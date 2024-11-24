@@ -57,6 +57,19 @@ RSpec.describe(Handlers::SendMailService, type: :service) do
       expect(message_sent_session.mail_id).to eq('<msg-123@mail.example.com>')
     end
 
+    context 'when tracking is turned on' do
+      let(:service) { described_class.new(connection:, params:, options: { track_open_message: true }) }
+
+      it 'injects open email IMG tag' do
+        service.call!
+
+        email_body   = service.params[:mail_message_params][:body]
+        tracking_key = service.message_sent_session.track_messages.last.tracking_key
+
+        expect(email_body).to include("#{tracking_key}/1x1.png")
+      end
+    end
+
     context 'when sending fails' do
       before do
         allow(delivery_service).to receive(:status).and_return(false)
