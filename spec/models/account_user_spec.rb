@@ -21,4 +21,12 @@ RSpec.describe(AccountUser, type: :model) do
   describe 'enums' do
     it { is_expected.to define_enum_for(:role).with_values(admin: 0, member: 1)}
   end
+
+  context 'individual account' do
+    describe 'when default role' do
+      it 'is admin' do
+        expect(account_user.role).to eq('admin')
+      end
+    end
+  end
 end

@@ -35,7 +35,7 @@ module OmnibirdBackend
     config.session_store :cookie_store, key: '_app_session'
 
     config.time_zone = 'Pacific Time (US & Canada)'
-    # config.eager_load_paths << Rails.root.join("extras")
+    config.eager_load_paths << Rails.root.join('lib/extensions')
 
     # Only loads a smaller set of middleware suitable for API only apps.
     # Middleware like session, flash, cookies can be added back manually.

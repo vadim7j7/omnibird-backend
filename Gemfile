@@ -23,7 +23,8 @@ gem 'httparty', require: false
 gem 'mime-types', require: false
 
 # Security
-# ...
+gem 'jwt'
+gem 'pundit'
 
 # Performance
 # ...

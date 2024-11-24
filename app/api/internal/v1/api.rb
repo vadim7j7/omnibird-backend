@@ -16,16 +16,16 @@ module Internal
       # use Middlewares::...
 
       # Importing helpers and some modules
-      # ...
+      helpers Helpers::AuthenticationHelpers
 
       # Init some helpers
       helpers do
-        # Skip....
+        def pundit_user; end
       end
 
       # Call callbacks
       before do
-        # Skip...
+        authenticate
       end
 
       namespace :internal do
