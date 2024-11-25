@@ -8,7 +8,7 @@ RSpec.describe(Handlers::SendMailService, type: :service) do
     { mail_message_params: { from: Faker::Internet.email,
                              to: [Faker::Internet.email],
                              subject: 'Test Subject',
-                             body: Faker::HTML.paragraph }, thread_id: 'thread-123' }
+                             body: Faker::HTML.paragraph + Faker::HTML.element(tag: 'a', attributes: { href: Faker::Internet.url }) }, thread_id: 'thread-123' }
   end
 
   let(:service) { described_class.new(connection:, params:) }
@@ -58,15 +58,24 @@ RSpec.describe(Handlers::SendMailService, type: :service) do
     end
 
     context 'when tracking is turned on' do
-      let(:service) { described_class.new(connection:, params:, options: { track_open_message: true }) }
+      let(:service) { described_class.new(connection:, params:, options: { track_click_link: true, track_open_message: true }) }
 
       it 'injects open email IMG tag' do
         service.call!
 
         email_body   = service.params[:mail_message_params][:body]
-        tracking_key = service.message_sent_session.track_messages.last.tracking_key
+        tracking_key = service.message_sent_session.track_messages.open_message.last.tracking_key
 
         expect(email_body).to include("#{tracking_key}/1x1.png")
+      end
+
+      it 'replaces links with tracking urls' do
+        service.call!
+
+        email_body   = service.params[:mail_message_params][:body]
+        tracking_key = service.message_sent_session.track_messages.click_link.last.tracking_key
+
+        expect(email_body).to include("/#{tracking_key}/1x1.png")
       end
     end
 

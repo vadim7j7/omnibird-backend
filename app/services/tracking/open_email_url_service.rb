@@ -20,12 +20,6 @@ module Tracking
         .new(action_type: :open_message, message_sent_session: @params[:message_sent_session])
     end
 
-    # @param[String] tracking_key
-    # @return[String]
-    def tracking_url(tracking_key)
-      "#{ENV.fetch('API_FULL_URI')}/v1/public/#{tracking_key}/1x1.png"
-    end
-
     def adding_tracking_url!
       doc = Nokogiri::HTML5(@params[:body])
       doc.at('body').children.before(img_tag(doc:))
@@ -43,7 +37,7 @@ module Tracking
       img_tag['width']  = '1'
       img_tag['height'] = '1'
       img_tag['style']  = css_style
-      img_tag['src']    = tracking_url(track_message.tracking_key)
+      img_tag['src']    = track_message.url
 
       img_tag
     end

@@ -150,9 +150,8 @@ module Handlers
 
     # @param[Hash]
     def tracking_params
-      @tracking_params ||=
-        { message_sent_session:,
-          body: params[:mail_message_params][:body] }
+      { message_sent_session:,
+        body: params[:mail_message_params][:body] }
     end
   end
 end
