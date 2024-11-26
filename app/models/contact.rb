@@ -3,6 +3,8 @@
 class Contact < ApplicationRecord
   before_validation :set_email_domain!, if: -> { email.present? }
 
+  normalizes :email, with: ->(email) { email.downcase }
+
   belongs_to :account
   belongs_to :user
 
