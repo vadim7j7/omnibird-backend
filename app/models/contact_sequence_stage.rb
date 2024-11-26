@@ -3,7 +3,7 @@
 class ContactSequenceStage < ApplicationRecord
   belongs_to :contact_sequence
   belongs_to :sequence_stage
-  belongs_to :message_sent_session
+  belongs_to :message_sent_session, optional: true
 
   has_many :contact_sequence_stage_activities, dependent: :destroy
 

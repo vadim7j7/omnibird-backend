@@ -8,6 +8,7 @@ RSpec.describe(ContactSequenceStage, type: :model) do
   subject { contact_sequence_stage }
 
   describe 'attributes' do
+    it { is_expected.to respond_to(:stage_snapshot) }
     it { is_expected.to respond_to(:created_at) }
     it { is_expected.to respond_to(:updated_at) }
   end
@@ -15,7 +16,7 @@ RSpec.describe(ContactSequenceStage, type: :model) do
   describe 'associations' do
     it { should belong_to(:contact_sequence) }
     it { should belong_to(:sequence_stage) }
-    it { should belong_to(:message_sent_session) }
+    it { should belong_to(:message_sent_session).optional(true) }
     it { should have_many(:contact_sequence_stage_activities).dependent(true) }
   end
 

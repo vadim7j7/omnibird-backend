@@ -108,7 +108,8 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_17_223630) do
   create_table "contact_sequence_stages", force: :cascade do |t|
     t.bigint "contact_sequence_id", null: false
     t.bigint "sequence_stage_id", null: false
-    t.bigint "message_sent_session_id", null: false
+    t.bigint "message_sent_session_id"
+    t.jsonb "stage_snapshot", default: {}
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["contact_sequence_id"], name: "index_contact_sequence_stages_on_contact_sequence_id"
