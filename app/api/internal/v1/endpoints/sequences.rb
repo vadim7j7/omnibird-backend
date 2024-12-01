@@ -24,7 +24,14 @@ module Internal
             failure(Entities::Constants::FAILURE_CREATE_UPDATE)
           end
           params { use(:sequence_create_params) }
-          post '/' do; end
+          post '/' do
+            sequence         = Sequence.new(declared_params[:sequence])
+            sequence.user    = current_user
+            sequence.account = current_account
+            sequence.save!
+
+            present(sequence, with: Entities::Sequences::ItemPreviewEntity)
+          end
 
           route_param :id do
             desc 'Get a sequence by id' do

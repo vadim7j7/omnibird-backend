@@ -36,15 +36,12 @@ module Internal
         private
 
         def load_current_account_user!
+          resource = current_user.account_users.includes(:account)
           @current_account_user =
             if account_value.blank? || account_value == 'me'
-              current_user
-                .account_users
-                .joins(:account)
-                .admin
-                .find_by(account: { type_of_account: :individual })
+              resource.admin.find_by(account: { type_of_account: :individual })
             else
-              current_user.account_users.find_by(**account_attrs)
+              resource.find_by(account_attrs)
             end
 
           nil
@@ -57,7 +54,7 @@ module Internal
 
         # @return[Hash]
         def account_attrs
-          { slug: account_value }
+          { account: { slug: account_value } }
         end
       end
     end

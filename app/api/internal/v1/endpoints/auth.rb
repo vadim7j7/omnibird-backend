@@ -5,6 +5,17 @@ module Internal
     module Endpoints
       class Auth < Grape::API
         namespace :auth do
+          desc 'Check access for current user and current account' do
+            summary('Current user and Current account')
+            failure(Entities::Constants::FAILURE_READ_DELETE)
+          end
+          get '/' do
+            authenticate!
+            load_account!
+
+            status(:no_content)
+          end
+
           namespace :oauth do
             desc 'Get list of oAuth providers' do
               summary('List of oAuth providers')

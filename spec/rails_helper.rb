@@ -73,4 +73,6 @@ RSpec.configure do |config|
 
   # Loading helpers
   config.include(FactoryBot::Syntax::Methods)
+  config.include(Requests::JsonHelpers, type: :request)
+  config.include(Requests::ApiHelpers, type: :request)
 end

@@ -10,13 +10,14 @@ module Internal
       version CURRENT_VERSION
 
       # Include concerns
-      # include Handler....
+      include HandlerExceptions
 
       # Add middlewares
       # use Middlewares::...
 
       # Importing helpers and some modules
       helpers Helpers::AuthenticationHelpers
+      helpers Helpers::CurrentAccountHelpers
 
       # Init some helpers
       helpers do
@@ -26,6 +27,7 @@ module Internal
       # Call callbacks
       before do
         authenticate
+        load_account
       end
 
       namespace :internal do
