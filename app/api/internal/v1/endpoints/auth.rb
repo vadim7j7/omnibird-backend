@@ -13,7 +13,8 @@ module Internal
             authenticate!
             load_account!
 
-            status(:no_content)
+            { userId: current_user.id,
+              accountId: current_account.id }
           end
 
           namespace :oauth do

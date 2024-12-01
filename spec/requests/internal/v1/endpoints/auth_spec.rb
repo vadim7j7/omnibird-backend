@@ -11,7 +11,8 @@ RSpec.describe(Internal::V1::Endpoints::Auth, type: :request) do
     context 'when a user is signed in' do
       before { api_get('/auth', account:, user:) }
 
-      it { expect(response).to have_http_status :no_content }
+      it { expect(response).to have_http_status :ok }
+      it { expect(json).to eq({ userId: user.id, accountId: account.id }) }
     end
 
     context 'when a user has no credentials' do
