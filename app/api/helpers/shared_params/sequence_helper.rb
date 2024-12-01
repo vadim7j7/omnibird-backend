@@ -8,6 +8,8 @@ module Helpers
       params(:sequence_setting_params) do
         optional(:id, type: Integer, desc: 'ID of the sequence settings to update record')
 
+        requires(:connection_id, type: Integer, desc: 'Connection ID')
+
         optional(:timezone, type: String, default: Time.zone.tzinfo.name, desc: 'Timezone fot the sequence')
         optional(:schedule_start_at, type: DateTime, desc: 'When to start the sequence')
         optional(:allowed_send_window_from, type: Time, desc: 'Time range when to allow to send the sequence FROM')
@@ -96,7 +98,7 @@ module Helpers
         requires(:sequence, type: Hash) do
           use(:sequence_params)
 
-          requires(:sequence_setting_attribute, type: Hash) { use(:sequence_setting_params) }
+          requires(:sequence_setting_attributes, type: Hash) { use(:sequence_setting_params) }
           requires(:sequence_stages_attributes, type: Array) { use(:sequence_stage_params) }
         end
       end

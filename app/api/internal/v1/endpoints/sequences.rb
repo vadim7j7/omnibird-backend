@@ -7,6 +7,11 @@ module Internal
         helpers ::Helpers::SharedParams::Main
         helpers ::Helpers::SharedParams::SequenceHelper
 
+        before do
+          authenticate!
+          load_account!
+        end
+
         namespace :sequences do
           params do
             use(:pagination)

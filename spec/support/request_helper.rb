@@ -24,7 +24,15 @@ module Requests
 
     # @param[String] path
     # @param[Hash] options
-    def api_post(path, options = {}); end
+    def api_post(path, options = {})
+      headers = signed_in_headers(
+        account: options[:account],
+        user: options[:user],
+        headers: options[:headers] || {}
+      )
+
+      post("#{root_path(options)}#{path}", params: options[:params], headers:)
+    end
 
     # @param[String] path
     # @param[Hash] options
