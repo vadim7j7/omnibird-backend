@@ -38,20 +38,32 @@ module Internal
             present(sequence, with: Entities::Sequences::ItemPreviewEntity)
           end
 
+          params do
+            requires(:id, type: Integer, desc: 'ID of a sequence')
+          end
           route_param :id do
+            before { @sequence = Sequence.find!(id: params[:id]) }
+
             desc 'Get a sequence by id' do
               summary('Get a sequence')
               success(Entities::Sequences::ItemEntity)
               failure(Entities::Constants::FAILURE_READ_DELETE)
             end
-            get '/' do; end
+            get '/' do
+              present(@sequence, with: Entities::Sequences::ItemEntity)
+            end
 
             desc 'Update a sequence by id' do
               summary('Update a sequence')
               success(Entities::Sequences::ItemEntity)
               failure(Entities::Constants::FAILURE_CREATE_UPDATE)
             end
-            patch '/' do; end
+            params { use(:sequence_create_params) }
+            patch '/' do
+              @sequence.update!(declared_params[:sequence])
+
+              present(@sequence, with: Entities::Sequences::ItemEntity)
+            end
 
             desc 'Delete a sequence by id' do
               summary('Delete a sequence')
@@ -59,6 +71,8 @@ module Internal
               failure(Entities::Constants::FAILURE_READ_DELETE)
             end
             delete '/' do
+              @sequence.destroy!
+
               status(:no_content)
             end
 

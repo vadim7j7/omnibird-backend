@@ -4,6 +4,9 @@ module Public
   module V1
     module Endpoints
       class Tracking < Grape::API
+        params do
+          requires(:tracking_key, type: String, desc: 'Uniq tracking key')
+        end
         route_param :tracking_key do
           format('txt')
 
