@@ -67,6 +67,9 @@ jobs:
       SERVICE_GOOGLE_CLIENT_SECRET: ""
 
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
