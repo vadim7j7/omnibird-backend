@@ -46,12 +46,13 @@ jobs:
         ports:
           - "5432:5432"
         env:
-          RAILS_ENV: test
           POSTGRES_DB: omnibird_backend_test
           POSTGRES_USER: rails
           POSTGRES_PASSWORD: password
 
     env:
+      RAILS_ENV: test
+
       API_URI_SCHEMA: "https://"
       API_URI_DOMAIN: "api.example.com"
       API_FULL_URI: "https://api.example.com"
