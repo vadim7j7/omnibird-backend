@@ -52,6 +52,7 @@ jobs:
 
     env:
       RAILS_ENV: test
+      RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
 
       API_URI_SCHEMA: "https://"
       API_URI_DOMAIN: "api.example.com"
@@ -63,14 +64,15 @@ jobs:
 
       MAILER_FROM: 'mail@example.com'
 
-      RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
-
       OMNIBIRD_BACKEND_DATABASE_HOST: "localhost"
       OMNIBIRD_BACKEND_DATABASE_USERNAME: "rails"
       OMNIBIRD_BACKEND_DATABASE_PASSWORD: "password"
 
       SERVICE_GOOGLE_CLIENT_ID: ""
       SERVICE_GOOGLE_CLIENT_SECRET: ""
+
+      SERVICE_MICROSOFT_CLIENT_ID: ""
+      SERVICE_MICROSOFT_CLIENT_SECRET: ""
 
     steps:
       - name: Checkout code
