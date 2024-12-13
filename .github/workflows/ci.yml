@@ -67,6 +67,12 @@ jobs:
       SERVICE_GOOGLE_CLIENT_SECRET: ""
 
     steps:
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: .ruby-version
+          bundler-cache: true
+
       - name: Set up database schema
         run: bin/rails db:schema:load
 
