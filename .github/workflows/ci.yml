@@ -61,6 +61,8 @@ jobs:
       APP_URI_DOMAIN: "example.com"
       APP_FULL_URI: "https://example.com"
 
+      MAILER_FROM: 'mail@example.com'
+
       OMNIBIRD_BACKEND_DATABASE_HOST: "localhost"
       OMNIBIRD_BACKEND_DATABASE_USERNAME: "rails"
       OMNIBIRD_BACKEND_DATABASE_PASSWORD: "password"
