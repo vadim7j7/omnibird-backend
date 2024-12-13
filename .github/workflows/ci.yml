@@ -63,6 +63,8 @@ jobs:
 
       MAILER_FROM: 'mail@example.com'
 
+      RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
+
       OMNIBIRD_BACKEND_DATABASE_HOST: "localhost"
       OMNIBIRD_BACKEND_DATABASE_USERNAME: "rails"
       OMNIBIRD_BACKEND_DATABASE_PASSWORD: "password"
