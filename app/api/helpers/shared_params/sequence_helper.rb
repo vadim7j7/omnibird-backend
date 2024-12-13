@@ -8,7 +8,7 @@ module Helpers
       params(:sequence_setting_params) do
         optional(:id, type: Integer, desc: 'ID of the sequence settings to update record')
 
-        requires(:connection_id, type: Integer, desc: 'Connection ID')
+        optional(:connection_id, type: Integer, desc: 'Connection ID')
 
         optional(:timezone, type: String, default: Time.zone.tzinfo.name, desc: 'Timezone fot the sequence')
         optional(:schedule_start_at, type: DateTime, desc: 'When to start the sequence')
@@ -71,12 +71,12 @@ module Helpers
         optional(:_destroy, type: Boolean, default: false, desc: 'Mark it to delete if id is provided')
 
         optional(:stage_index, type: Integer, default: 0, desc: 'Organizing the stage for a sequence')
-        requires(:subject, type: String, desc: 'Subject for email')
+        optional(:subject, type: String, desc: 'Subject for email')
 
-        requires(:template, type: String, desc: 'Template message body')
+        optional(:template, type: String, desc: 'Template message body')
 
-        requires(:perform_in_unit, type: Integer, desc: 'Perform the stage after adding (in units)')
-        requires(
+        optional(:perform_in_unit, type: Integer, desc: 'Perform the stage after adding (in units)')
+        optional(
           :perform_in_period,
           type: String,
           values: SequenceStage.perform_in_periods.keys,
@@ -91,7 +91,7 @@ module Helpers
       end
 
       params(:sequence_params) do
-        requires(:name, type: String, desc: 'Name of a sequence')
+        optional(:name, type: String, desc: 'Name of a sequence')
       end
 
       params(:sequence_create_params) do
@@ -100,6 +100,15 @@ module Helpers
 
           requires(:sequence_setting_attributes, type: Hash) { use(:sequence_setting_params) }
           requires(:sequence_stages_attributes, type: Array) { use(:sequence_stage_params) }
+        end
+      end
+
+      params(:sequence_update_params) do
+        requires(:sequence, type: Hash) do
+          use(:sequence_params)
+
+          optional(:sequence_setting_attributes, type: Hash) { use(:sequence_setting_params) }
+          optional(:sequence_stages_attributes, type: Array) { use(:sequence_stage_params) }
         end
       end
     end

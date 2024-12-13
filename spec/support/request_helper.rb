@@ -36,15 +36,39 @@ module Requests
 
     # @param[String] path
     # @param[Hash] options
-    def api_put(path, options = {}); end
+    def api_put(path, options = {})
+      headers = signed_in_headers(
+        account: options[:account],
+        user: options[:user],
+        headers: options[:headers] || {}
+      )
+
+      put("#{root_path(options)}#{path}", params: options[:params], headers:)
+    end
 
     # @param[String] path
     # @param[Hash] options
-    def api_patch(path, options = {}); end
+    def api_patch(path, options = {})
+      headers = signed_in_headers(
+        account: options[:account],
+        user: options[:user],
+        headers: options[:headers] || {}
+      )
+
+      patch("#{root_path(options)}#{path}", params: options[:params], headers:)
+    end
 
     # @param[String] path
     # @param[Hash] options
-    def api_delete(path, options = {}); end
+    def api_delete(path, options = {})
+      headers = signed_in_headers(
+        account: options[:account],
+        user: options[:user],
+        headers: options[:headers] || {}
+      )
+
+      delete("#{root_path(options)}#{path}", params: options[:params], headers:)
+    end
 
     # @param[Account] account
     # @param[User] user

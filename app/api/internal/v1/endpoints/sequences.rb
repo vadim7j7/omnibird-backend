@@ -30,7 +30,7 @@ module Internal
           end
           params { use(:sequence_create_params) }
           post '/' do
-            sequence         = Sequence.new(declared_params[:sequence])
+            sequence         = Sequence.new(declared_params(include_missing: true)[:sequence])
             sequence.user    = current_user
             sequence.account = current_account
             sequence.save!
@@ -42,7 +42,7 @@ module Internal
             requires(:id, type: Integer, desc: 'ID of a sequence')
           end
           route_param :id do
-            before { @sequence = Sequence.find!(id: params[:id]) }
+            before { @sequence = Sequence.find_by!(id: params[:id]) }
 
             desc 'Get a sequence by id' do
               summary('Get a sequence')
@@ -58,7 +58,7 @@ module Internal
               success(Entities::Sequences::ItemEntity)
               failure(Entities::Constants::FAILURE_CREATE_UPDATE)
             end
-            params { use(:sequence_create_params) }
+            params { use(:sequence_update_params) }
             patch '/' do
               @sequence.update!(declared_params[:sequence])
 
