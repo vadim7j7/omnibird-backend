@@ -9,6 +9,32 @@ jobs:
   scan_ruby:
     runs-on: ubuntu-latest
 
+    services:
+      postgres:
+        image: postgres:11-alpine
+        ports:
+          - "5432:5432"
+        env:
+          POSTGRES_DB: omnibird_backend_test
+          POSTGRES_USER: rails
+          POSTGRES_PASSWORD: password
+
+    env:
+      API_URI_SCHEMA: "https://"
+      API_URI_DOMAIN: "api.example.com"
+      API_FULL_URI: "https://api.example.com"
+
+      APP_URI_SCHEMA: "https://"
+      APP_URI_DOMAIN: "example.com"
+      APP_FULL_URI: "https://example.com"
+
+      OMNIBIRD_BACKEND_DATABASE_HOST: "localhost"
+      OMNIBIRD_BACKEND_DATABASE_USERNAME: "rails"
+      OMNIBIRD_BACKEND_DATABASE_PASSWORD: "password"
+
+      SERVICE_GOOGLE_CLIENT_ID: ""
+      SERVICE_GOOGLE_CLIENT_SECRET: ""
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -21,6 +47,12 @@ jobs:
 
       - name: Scan for common Rails security vulnerabilities using static analysis
         run: bin/brakeman --no-pager
+
+      - name: Set up database schema
+        run: bin/rails db:schema:load
+
+      - name: Run tests
+        run: bundle exec rspec
 
   lint:
     runs-on: ubuntu-latest
