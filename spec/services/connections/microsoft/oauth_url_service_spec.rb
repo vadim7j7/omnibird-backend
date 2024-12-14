@@ -13,7 +13,7 @@ RSpec.describe(Connections::Microsoft::OauthUrlService, type: :service) do
       let!(:url_params) { Rack::Utils.parse_query(URI.parse(subject.result[:oauth_url]).query).deep_symbolize_keys }
 
       it { expect(url_params[:response_type]).to eq('code') }
-      it { expect(url_params[:client_id]).to eq(ENV.fetch('SERVICE_MICROSOFT_CLIENT_ID')) }
+      it { expect(url_params[:client_id]).to eq(Rails.application.credentials.services.microsoft_client_id) }
       it { expect(url_params[:redirect_uri]).to include('auth/callback/microsoft') }
       it { expect(url_params[:scope]).to eq('openid profile email User.Read') }
       it { expect(url_params[:state]).to be_present }
@@ -30,7 +30,7 @@ RSpec.describe(Connections::Microsoft::OauthUrlService, type: :service) do
     let!(:url_params) { Rack::Utils.parse_query(URI.parse(subject.result[:oauth_url]).query).deep_symbolize_keys }
 
     it { expect(url_params[:response_type]).to eq('code') }
-    it { expect(url_params[:client_id]).to eq(ENV.fetch('SERVICE_MICROSOFT_CLIENT_ID')) }
+    it { expect(url_params[:client_id]).to eq(Rails.application.credentials.services.microsoft_client_secret) }
     it { expect(url_params[:redirect_uri]).to include('auth/callback/microsoft') }
     it { expect(url_params[:scope]).to eq('openid profile email offline_access User.Read Mail.Read Mail.Send') }
     it { expect(url_params[:state]).to be_present }

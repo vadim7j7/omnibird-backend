@@ -7,12 +7,12 @@ module Connections
 
       # @return[String]
       def client_id
-        ENV.fetch('SERVICE_GOOGLE_CLIENT_ID')
+        Rails.application.credentials.services.google_client_id
       end
 
       # @return[String]
       def client_secret
-        ENV.fetch('SERVICE_GOOGLE_CLIENT_SECRET')
+        Rails.application.credentials.services.google_client_secret
       end
     end
   end

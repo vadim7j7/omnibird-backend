@@ -5,8 +5,8 @@ require 'rails_helper'
 RSpec.describe(Connections::Google::CredentialsService, type: :service) do
   let(:token_url) { 'https://accounts.google.com/o/oauth2/token' }
   let(:userinfo_url) { 'https://www.googleapis.com/oauth2/v1/userinfo' }
-  let(:client_id) { ENV.fetch('SERVICE_GOOGLE_CLIENT_ID') }
-  let(:client_secret) { ENV.fetch('SERVICE_GOOGLE_CLIENT_SECRET') }
+  let(:client_id) { Rails.application.credentials.services.google_client_id }
+  let(:client_secret) { Rails.application.credentials.services.google_client_secret }
 
   describe '#call!' do
     describe 'Sign in/up oAuth url' do

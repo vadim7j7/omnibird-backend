@@ -7,12 +7,12 @@ module Connections
 
       # @return[String]
       def client_id
-        ENV.fetch('SERVICE_MICROSOFT_CLIENT_ID')
+        Rails.application.credentials.services.microsoft_client_id
       end
 
       # @return[String]
       def client_secret
-        ENV.fetch('SERVICE_MICROSOFT_CLIENT_SECRET')
+        Rails.application.credentials.services.microsoft_client_secret
       end
 
       # @param[Hash] data

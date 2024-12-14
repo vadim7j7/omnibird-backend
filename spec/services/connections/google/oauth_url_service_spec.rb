@@ -13,7 +13,7 @@ RSpec.describe(Connections::Google::OauthUrlService, type: :service) do
       let!(:url_params) { Rack::Utils.parse_query(URI.parse(subject.result[:oauth_url]).query).deep_symbolize_keys }
 
       it { expect(url_params[:response_type]).to eq('code') }
-      it { expect(url_params[:client_id]).to eq(ENV.fetch('SERVICE_GOOGLE_CLIENT_ID')) }
+      it { expect(url_params[:client_id]).to eq(Rails.application.credentials.services.google_client_id) }
       it { expect(url_params[:redirect_uri]).to include('auth/callback/google') }
       it { expect(url_params[:scope]).to eq('https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile') }
       it { expect(url_params[:state]).to be_present }
@@ -32,7 +32,7 @@ RSpec.describe(Connections::Google::OauthUrlService, type: :service) do
     it { expect(url_params[:access_type]).to eq('offline') }
     it { expect(url_params[:prompt]).to eq('consent') }
     it { expect(url_params[:response_type]).to eq('code') }
-    it { expect(url_params[:client_id]).to eq(ENV.fetch('SERVICE_GOOGLE_CLIENT_ID')) }
+    it { expect(url_params[:client_id]).to eq(Rails.application.credentials.services.google_client_secret) }
     it { expect(url_params[:redirect_uri]).to include('auth/callback/google') }
     it { expect(url_params[:scope]).to eq('https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/gmail.compose https://www.googleapis.com/auth/gmail.readonly') }
     it { expect(url_params[:state]).to be_present }

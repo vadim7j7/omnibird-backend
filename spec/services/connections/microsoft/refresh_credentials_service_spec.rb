@@ -4,8 +4,8 @@ require 'rails_helper'
 
 RSpec.describe(Connections::Microsoft::RefreshCredentialsService, type: :service) do
   let(:token_url) { 'https://login.microsoftonline.com/common/oauth2/v2.0/token' }
-  let(:client_id) { ENV.fetch('SERVICE_MICROSOFT_CLIENT_ID') }
-  let(:client_secret) { ENV.fetch('SERVICE_MICROSOFT_CLIENT_SECRET') }
+  let(:client_id) { Rails.application.credentials.services.microsoft_client_id }
+  let(:client_secret) { Rails.application.credentials.services.microsoft_client_secret }
 
   describe '#call!' do
     let(:connection) { build(:microsoft_email_sender) }

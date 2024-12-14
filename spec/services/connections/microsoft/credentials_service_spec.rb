@@ -6,8 +6,8 @@ RSpec.describe(Connections::Microsoft::CredentialsService, type: :service) do
   let(:token_url) { 'https://login.microsoftonline.com/common/oauth2/v2.0/token' }
   let(:userinfo_url) { 'https://graph.microsoft.com/v1.0/me' }
   let(:avatar_url) { 'https://graph.microsoft.com/v1.0/me/photo/$value' }
-  let(:client_id) { ENV.fetch('SERVICE_MICROSOFT_CLIENT_ID') }
-  let(:client_secret) { ENV.fetch('SERVICE_MICROSOFT_CLIENT_SECRET') }
+  let(:client_id) { Rails.application.credentials.services.microsoft_client_id }
+  let(:client_secret) { Rails.application.credentials.services.microsoft_client_secret }
 
   let(:user_info_response) do
     { 'id' => Faker::Internet.uuid,

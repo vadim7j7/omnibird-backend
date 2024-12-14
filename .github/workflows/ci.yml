@@ -68,12 +68,6 @@ jobs:
       OMNIBIRD_BACKEND_DATABASE_USERNAME: "rails"
       OMNIBIRD_BACKEND_DATABASE_PASSWORD: "password"
 
-      SERVICE_GOOGLE_CLIENT_ID: ""
-      SERVICE_GOOGLE_CLIENT_SECRET: ""
-
-      SERVICE_MICROSOFT_CLIENT_ID: ""
-      SERVICE_MICROSOFT_CLIENT_SECRET: ""
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
