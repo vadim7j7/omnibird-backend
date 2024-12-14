@@ -75,8 +75,6 @@ module Internal
 
               status(:no_content)
             end
-
-            mount(SequenceContacts)
           end
         end
       end

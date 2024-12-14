@@ -36,6 +36,7 @@ module Internal
         mount(Endpoints::ActionRules)
         mount(Endpoints::Contacts)
         mount(Endpoints::Sequences)
+        mount(Endpoints::SequenceContacts)
         mount(Endpoints::Integrations)
 
         desc 'Root Api Endpoint' do
