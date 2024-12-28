@@ -4,6 +4,7 @@ module Internal
   module V1
     module Endpoints
       class Contacts < Grape::API
+        helpers ::Helpers::SharedParams::Main
         helpers ::Helpers::SharedParams::ContactHelper
 
         before do
