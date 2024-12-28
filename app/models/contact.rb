@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class Contact < ApplicationRecord
+  include FilteringUserAccountQuery
+
   before_validation :set_email_domain!, if: -> { email.present? }
 
   normalizes :email, with: ->(email) { email.downcase }

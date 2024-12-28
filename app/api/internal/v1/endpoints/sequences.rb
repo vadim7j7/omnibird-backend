@@ -13,16 +13,16 @@ module Internal
         end
 
         namespace :sequences do
-          params do
-            use(:pagination)
-          end
           desc 'Get list of sequences' do
             summary('List of sequences')
             success(Entities::Sequences::ItemsEntity)
             failure(Entities::Constants::FAILURE_READ_DELETE)
           end
+          params do
+            use(:pagination)
+          end
           get '/' do
-            resource = Sequence.by_user(current_user).all
+            resource = Sequence.by_user_and_account(user: current_user).all
 
             present({ items: resource }, with: Entities::Sequences::ItemsEntity)
           end
