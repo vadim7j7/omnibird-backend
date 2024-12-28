@@ -21,7 +21,11 @@ module Internal
             success(Entities::Sequences::ItemsEntity)
             failure(Entities::Constants::FAILURE_READ_DELETE)
           end
-          get '/' do; end
+          get '/' do
+            resource = Sequence.by_user(current_user).all
+
+            present({ items: resource }, with: Entities::Sequences::ItemsEntity)
+          end
 
           desc 'Create a sequence' do
             summary('Create a new sequence')

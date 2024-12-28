@@ -8,6 +8,42 @@ RSpec.describe(Internal::V1::Endpoints::Sequences, type: :request) do
   let(:sequence) { create(:sequence, account:, user:) }
   let(:another_account) { create(:account) }
 
+  describe '#GET /sequences' do
+    describe 'when a user has sequences of his own and from the account' do
+      let(:user) { create(:user_in_company_account) }
+      let(:account) { user.accounts.first }
+      let(:another_user) { create(:user) }
+
+      before do
+        create(:account_user, user: another_user, account:)
+        create_list(:sequence, 2, user:, account:)
+        create_list(:sequence, 2, user: another_user, account:)
+      end
+
+      it 'has 4 sequences' do
+        api_get('/sequences', account:, user:)
+
+        expect(json[:items].count).to be(4)
+      end
+    end
+
+    describe 'when a user is signed in' do
+      it 'returns :ok status' do
+        api_get('/sequences', account:, user:)
+
+        expect(response).to have_http_status :ok
+      end
+    end
+
+    describe 'when a user is not signed in' do
+      it 'returns :unauthorized status' do
+        api_get("/sequences/#{sequence.id}", account:)
+
+        expect(response).to have_http_status :unauthorized
+      end
+    end
+  end
+
   describe '#POST /sequences' do
     let(:connection) { create(:google_email_sender, user:, account:) }
 
