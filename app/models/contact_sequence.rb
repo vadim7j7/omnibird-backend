@@ -8,4 +8,6 @@ class ContactSequence < ApplicationRecord
   has_many :contact_sequence_stages, dependent: :destroy
 
   enum :status, %i[queued active paused exited bounced]
+
+  accepts_nested_attributes_for :contact, update_only: true
 end

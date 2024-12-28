@@ -11,6 +11,8 @@ class Sequence < ApplicationRecord
   has_many :contact_sequences, dependent: :destroy
   has_many :contacts, through: :contact_sequences
 
+  has_one :connection, through: :sequence_setting
+
   enum :status, %i[pending started paused]
 
   validates :name, presence: true
