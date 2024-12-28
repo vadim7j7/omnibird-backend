@@ -7,6 +7,7 @@ class Sequence < ApplicationRecord
   has_one :sequence_setting, dependent: :destroy
   has_many :sequence_stages, dependent: :destroy
   has_many :contact_sequences, dependent: :destroy
+  has_many :contacts, through: :contact_sequences
 
   enum :status, %i[pending started paused]
 
